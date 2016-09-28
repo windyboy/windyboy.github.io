@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Nghttpx on 后花园</title>
-    <link>https://windyboy.github.io/tags/nghttpx/</link>
-    <description>Recent content in Nghttpx on 后花园</description>
+    <title>后花园</title>
+    <link>https://windyboy.github.io/tags/nghttpx/index.xml</link>
+    <description>Recent content on 后花园</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <copyright>windyboy © 2016 Copyright Text</copyright>
-    <lastBuildDate>Tue, 24 May 2016 15:13:14 +0800</lastBuildDate>
+    <copyright>Written by windyboy</copyright>
     <atom:link href="https://windyboy.github.io/tags/nghttpx/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
@@ -18,7 +17,7 @@
       <guid>https://windyboy.github.io/post/2016/05/proxy-with-nghttpx-squid/</guid>
       <description>
 
-&lt;h2 id=&#34;概况:5734c22c6813d20780f94abcff46c5b3&#34;&gt;概况&lt;/h2&gt;
+&lt;h2 id=&#34;概况&#34;&gt;概况&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;服务器&lt;/p&gt;
@@ -43,7 +42,7 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;安装:5734c22c6813d20780f94abcff46c5b3&#34;&gt;安装&lt;/h2&gt;
+&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
 
 &lt;p&gt;这里安装的过程以centos 7为例，其他发行版本可根据实际情况适当&lt;/p&gt;
 
@@ -107,9 +106,9 @@ sudo make install
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;配置:5734c22c6813d20780f94abcff46c5b3&#34;&gt;配置&lt;/h2&gt;
+&lt;h2 id=&#34;配置&#34;&gt;配置&lt;/h2&gt;
 
-&lt;h3 id=&#34;证书:5734c22c6813d20780f94abcff46c5b3&#34;&gt;证书&lt;/h3&gt;
+&lt;h3 id=&#34;证书&#34;&gt;证书&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;服务器证书&lt;/p&gt;
@@ -162,7 +161,7 @@ set_var EASYRSA_REQ_OU         &amp;quot;My Organizational Unit&amp;quot;
 ca.pem导入为可信任的证书颁发机构，client-me.pem导入为信任证书。&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;代理:5734c22c6813d20780f94abcff46c5b3&#34;&gt;代理&lt;/h3&gt;
+&lt;h3 id=&#34;代理&#34;&gt;代理&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;创建nghttpx的配置文件&lt;/p&gt;
@@ -202,15 +201,13 @@ strip-incoming-x-forwarded-for=yes
 &lt;pre&gt;&lt;code&gt;[Unit] 
 Description=nghttpx 
 After=network.target 
-
-
+     
 [Service] 
 Type=simple 
 ExecStart=/usr/local/bin/nghttpx --conf=/etc/nghttpx/nghttpx.conf
 ExecReload=/bin/kill -SIGUSR1 ${MAINPID}
 ExecStop=/bin/kill -SIGQUIT ${MAINPID}
-
-
+     
 [Install] 
 WantedBy=multi-user.target
 &lt;/code&gt;&lt;/pre&gt;
@@ -223,7 +220,7 @@ WantedBy=multi-user.target
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;缓存:5734c22c6813d20780f94abcff46c5b3&#34;&gt;缓存&lt;/h3&gt;
+&lt;h3 id=&#34;缓存&#34;&gt;缓存&lt;/h3&gt;
 
 &lt;p&gt;通过yum安装的squid服务，默认配置基本上已经满足要求，需要做一点小修改&lt;/p&gt;
 
@@ -246,7 +243,7 @@ access_log none
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;参考资料:5734c22c6813d20780f94abcff46c5b3&#34;&gt;参考资料&lt;/h2&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;nghttpx 官方指引 &lt;a href=&#34;https://nghttp2.org/documentation/nghttpx-howto.html&#34;&gt;https://nghttp2.org/documentation/nghttpx-howto.html&lt;/a&gt;&lt;/li&gt;

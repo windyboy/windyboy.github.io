@@ -77,7 +77,7 @@
     <article>
       
 
-<h2 id="概况:5734c22c6813d20780f94abcff46c5b3">概况</h2>
+<h2 id="概况">概况</h2>
 
 <ul>
 <li><p>服务器</p>
@@ -102,7 +102,7 @@
 </ul></li>
 </ul>
 
-<h2 id="安装:5734c22c6813d20780f94abcff46c5b3">安装</h2>
+<h2 id="安装">安装</h2>
 
 <p>这里安装的过程以centos 7为例，其他发行版本可根据实际情况适当</p>
 
@@ -166,9 +166,9 @@ sudo make install
 </code></pre></li>
 </ul>
 
-<h2 id="配置:5734c22c6813d20780f94abcff46c5b3">配置</h2>
+<h2 id="配置">配置</h2>
 
-<h3 id="证书:5734c22c6813d20780f94abcff46c5b3">证书</h3>
+<h3 id="证书">证书</h3>
 
 <ul>
 <li><p>服务器证书</p>
@@ -221,7 +221,7 @@ set_var EASYRSA_REQ_OU         &quot;My Organizational Unit&quot;
 ca.pem导入为可信任的证书颁发机构，client-me.pem导入为信任证书。</p></li>
 </ul>
 
-<h3 id="代理:5734c22c6813d20780f94abcff46c5b3">代理</h3>
+<h3 id="代理">代理</h3>
 
 <ul>
 <li><p>创建nghttpx的配置文件</p>
@@ -261,15 +261,13 @@ strip-incoming-x-forwarded-for=yes
 <pre><code>[Unit] 
 Description=nghttpx 
 After=network.target 
-
-
+     
 [Service] 
 Type=simple 
 ExecStart=/usr/local/bin/nghttpx --conf=/etc/nghttpx/nghttpx.conf
 ExecReload=/bin/kill -SIGUSR1 ${MAINPID}
 ExecStop=/bin/kill -SIGQUIT ${MAINPID}
-
-
+     
 [Install] 
 WantedBy=multi-user.target
 </code></pre>
@@ -282,7 +280,7 @@ WantedBy=multi-user.target
 </code></pre></li>
 </ul>
 
-<h3 id="缓存:5734c22c6813d20780f94abcff46c5b3">缓存</h3>
+<h3 id="缓存">缓存</h3>
 
 <p>通过yum安装的squid服务，默认配置基本上已经满足要求，需要做一点小修改</p>
 
@@ -305,7 +303,7 @@ access_log none
 </code></pre></li>
 </ul>
 
-<h2 id="参考资料:5734c22c6813d20780f94abcff46c5b3">参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 
 <ul>
 <li>nghttpx 官方指引 <a href="https://nghttp2.org/documentation/nghttpx-howto.html">https://nghttp2.org/documentation/nghttpx-howto.html</a></li>
@@ -321,7 +319,6 @@ access_log none
       
       
     </article>
-    --
     
  
 
@@ -348,6 +345,8 @@ access_log none
   
   <nav class="pagination-single">
     
+    
+      <span class="next"><a href="https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/" rel="next">tomcat 以 keystore 的方式使用 letsencrypt 证书</a> &rarr;</span>
     
   </nav>
 

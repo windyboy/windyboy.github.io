@@ -3,8 +3,12 @@
   
   <url>
     <loc>https://windyboy.github.io/</loc>
-    <lastmod>2016-05-24T15:13:14+08:00</lastmod>
-    <priority>0</priority>
+    <lastmod>2016-09-28T11:35:54+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/</loc>
+    <lastmod>2016-09-28T11:35:54+08:00</lastmod>
   </url>
   
   <url>
