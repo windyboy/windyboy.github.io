@@ -80,8 +80,8 @@
 <h2 id="概况">概况</h2>
 
 <ul>
-<li><a href="https://tomcat.apache.org">apache tomcat</a> 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式<a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html">keystore</a>, 并不能直接使用<a href="https://letsencrypt.org" title="letsencrypt">letsencrypt</a>的免费证书。</li>
-<li>要把证书导入<a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html">keystore</a>, 首先需要使用openssl把证书导出到.p12文件中，然后使用keytool把ca倒入为root(alias root)， 把服务器的证书导入为tomcat(alias tomcat)。</li>
+<li><a href="https://tomcat.apache.org/" title="apache tomcat">apache tomcat</a> 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式<a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html" title="keystore">keystore</a>, 并不能直接使用<a href="https://letsencrypt.org/" title="letsencrypt">letsencrypt</a>的免费证书。</li>
+<li>要把证书导入<a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html" title="keystore">keystore</a>, 首先需要使用<a href="https://www.openssl.org/" title="openssl">openssl</a>把证书导出到.p12文件中，然后使用keytool把ca倒入为root(alias root)， 把服务器的证书导入为tomcat(alias tomcat)。</li>
 </ul>
 
 <h2 id="导入证书">导入证书</h2>
@@ -90,11 +90,10 @@
 <li>前提</li>
 </ul>
 
-<p>已经成功申请到有效的证书。</p>
+<p>已经成功申请到有效的证书(使用<a href="https://letsencrypt.org/" title="letsencrypt">letsencrypt</a> 申请有效的服务器证书)。</p>
 
 <ul>
-<li>使用 openssl 工具，把证书导出到.p12文件中
-<br /></li>
+<li>使用 openssl 工具，把证书导出到.p12文件中</li>
 </ul>
 
 <pre><code>  # openssl pkcs12 -export -in cert.pem -inkey privkey.pem \
@@ -104,8 +103,7 @@
   Verifying - Enter Export Password:
 </code></pre>
 
-<p>提示输入导出密码，这里导出密码，可以直接回车，此时密码为空。
-  如果输入了密码，则在下面导入的时候需要输入相同的密码</p>
+<p>提示输入导出密码，这里导出密码，可以直接回车，此时密码为空。 如果输入了密码，则在下面导入的时候需要输入相同的密码</p>
 
 <ul>
 <li>使用keytool导入证书和ca</li>
@@ -118,7 +116,7 @@
   -srcstorepass &lt;theExportPasswordAbove&gt; -alias tomcat
 </code></pre>
 
-<p><code>注意deststorepass和destkeypass必须相同，否则tomcat无法获取证书</code></p>
+<p>注意deststorepass和destkeypass必须相同，否则tomcat无法获取证书</p>
 
 <pre><code>  # keytool -import -trustcacerts \
   -srcstorepass &lt;theExportPasswordAbove&gt; \
@@ -126,10 +124,10 @@
 </code></pre>
 
 <ul>
-<li>配置<a href="https://tomcat.apache.org">apache tomcat</a></li>
+<li>配置<a href="https://tomcat.apache.org/" title="apache tomcat">apache tomcat</a></li>
 </ul>
 
-<pre><code>  # nvim conf/server.xml
+<pre><code>  # vim conf/server.xml
   &lt;Connector port=&quot;443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;
             maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;
             keystoreFile=&quot;/&lt;path&gt;/MyKeyStore.jks&quot; keystorePass=&quot;&lt;changeit&gt;&quot;
@@ -138,7 +136,7 @@
 
 <p>keystoreFile 是MyKeyStore.jks文件的绝对路径</p>
 
-<p><code>keystorePass 是MyKeyStore.jks的storepasss以及keypass, 必须相同</code></p>
+<p><strong><em>keystorePass 是MyKeyStore.jks的storepasss以及keypass, 必须相同</em></strong></p>
 
 <h2 id="参考资料">参考资料</h2>
 
@@ -150,29 +148,33 @@
 <li>免费证书提供 <a href="https://letsencrypt.org/">https://letsencrypt.org/</a></li>
 </ul>
 
+<h2 id="vps-推荐">VPS 推荐</h2>
+
+<ul>
+<li><a href="https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66">linode 东京</a></li>
+<li><a href="https://bandwagonhost.com/aff.php?aff=20451">bandwagonhost 中国优化</a></li>
+<li><a href="https://www.dgchost.net/client/aff.php?aff=226">dgchost 新加波</a></li>
+</ul>
+
       
       
       
     </article>
     
- 
-
-<div class="ds-thread" data-thread-key="https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/" data-title="tomcat 以 keystore 的方式使用 letsencrypt 证书" data-url="https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/"></div>
-
-
+ <aside><div id="disqus_thread"></div></aside>
 
 <script type="text/javascript">
-    var duoshuoQuery = {short_name:"windyboy"};
+     
+    var disqus_shortname = 'windyboy';
 
+     
     (function() {
-     var ds = document.createElement('script');
-     ds.type = 'text/javascript';ds.async = true;
-     ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-     ds.charset = 'UTF-8';
-     (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-     })();
-    </script>
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 
 
@@ -182,6 +184,8 @@
     
       <span class="previous">&larr; <a href="https://windyboy.github.io/post/2016/05/proxy-with-nghttpx-squid/" rel="prev">nghttpx搭配squid科学浏览</a></span>
     
+    
+      <span class="next"><a href="https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/" rel="next">使用powerdns搭建自己安全的域名解析服务</a> &rarr;</span>
     
   </nav>
 
