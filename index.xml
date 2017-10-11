@@ -19,7 +19,7 @@
       
       <guid>https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/</guid>
       <description>概况  起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题 DNSSEC的key也要注册到注册商 使用postgresql替代mariadb原因在于，在目前这个版本中，日志里总是出现连接断开的警告  安装软件 两台服务器都安装相同的软件, authoritative 和 database
-从官方的repo安装authoritative服务软件  创建pdns的源  # vim /etc/apt/sources.list.d/pdns.list deb [arch=amd64] http://repo.powerdns.com/debian stretch-auth-master main   屏蔽debian自带的pdns  # vim /etc/apt/preferences.d/pdns Package: pdns-* Pin: origin repo.powerdns.com Pin-Priority: 800   引入官方的key  # curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add -   安装服务器软件  # apt-get update &amp;amp;&amp;amp; # apt-get install pdns-server  其他的系统可以到 https://repo.powerdns.com/ 参考响应的安装指引
+从官方的repo安装authoritative服务软件  创建pdns的源  # vim /etc/apt/sources.list.d/pdns.list deb [arch=amd64] http://repo.powerdns.com/debian stretch-auth-master main   屏蔽debian自带的pdns  # vim /etc/apt/preferences.d/pdns Package: pdns-* Pin: origin repo.powerdns.com Pin-Priority: 800   引入官方的key  # curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add -   安装服务器软件  # apt-get update # apt-get install pdns-server  其他的系统可以到 https://repo.powerdns.com/ 参考响应的安装指引
 安装数据库  安装postgresql  # apt install postgresql postgresql-client   初始化数据库账号  # sudo -u postgres psql postgres=# create user pdns with password &#39;mypdnspassword&#39;; postgres=# create database pdns owner pdns; postgres=# grant all privileges on database pdns to pdns; postgres=# \q   安装powerdns的backend  # apt install pdns-backend-pgsql  安装过程中会询问数据库用户的信息，根据前面初始化的用户名/密码，填入即可</description>
     </item>
     

@@ -127,7 +127,7 @@ Pin-Priority: 800
 <li>安装服务器软件</li>
 </ul>
 
-<pre><code># apt-get update &amp;&amp;
+<pre><code># apt-get update
 # apt-get install pdns-server
 </code></pre>
 
@@ -372,7 +372,7 @@ launch=
 
 <pre><code>dig some.host soa @localhost
 ;; ANSWER SECTION:
-some.host.              3600    IN      SOA     ns1.some.host. postmaster.some.host. 2017101106 28800 7200 604800 86400
+some.host.              3600    IN      SOA     ns1.some.host. hostmaster.some.host. 2017101106 28800 7200 604800 86400
 </code></pre>
 
 <h3 id="创建dnssec记录">创建DNSSEC记录</h3>
