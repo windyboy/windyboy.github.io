@@ -84,18 +84,18 @@
 <h2 id="概况">概况</h2>
 
 <ul>
-<li>起因： <a href="https://www.cloudxns.net/" title="cloudxns">cloudxns</a>停止了面向个人的服务</li>
+<li>起因： <a href="https://www.cloudxns.net/" title="cloudxns">cloudxns</a> 停止了面向个人的服务</li>
 <li>解析服务需要提供两个独立的IP，一主一从提供解析服务</li>
 <li>两个服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题</li>
 <li>DNSSEC的key也要注册到注册商</li>
-<li>使用<a href="https://www.postgresql.org/" title="postgresql">postgresql</a>替代<a href="https://mariadb.org/" title="mariadb">mariadb</a>原因在于，在目前这个版本中，日志里总是出现连接断开的警告</li>
+<li>使用 <a href="https://www.postgresql.org/" title="postgresql">postgresql</a> 替代<a href="https://mariadb.org/" title="mariadb">mariadb</a>原因在于，在目前这个版本中，日志里总是出现连接断开的警告</li>
 </ul>
 
 <h2 id="安装软件">安装软件</h2>
 
 <p><strong>两台服务器都安装相同的软件, authoritative 和 database</strong></p>
 
-<h3 id="从官方的-repo-https-repo-powerdns-com-安装authoritative服务软件">从官方的<a href="https://repo.powerdns.com/">repo</a>安装authoritative服务软件</h3>
+<h3 id="从官方的-repo-安装-authoritative-服务软件">从官方的 repo 安装 authoritative 服务软件</h3>
 
 <ul>
 <li>创建pdns的源</li>
@@ -179,7 +179,7 @@ pdns=&gt;\q
 
 <p>x.x.x.x1 是主服务器的IP地址</p>
 
-<h3 id="安装-poweradmin">安装 <a href="http://www.poweradmin.org/" title="poweradmin">poweradmin</a></h3>
+<h3 id="安装-poweradmin">安装 poweradmin</h3>
 
 <p><strong>管理界面只安装在主服务器上</strong></p>
 
@@ -300,7 +300,7 @@ x.x.x.x2   ns2.some.host
 </code></pre>
 
 <ul>
-<li>配置<a href="https://powerdns.com/" title="powerdns">powerdns</a>配置文件</li>
+<li>配置 powerdns</li>
 </ul>
 
 <p>在主服务器(ns1.some.host)上配置</p>
@@ -355,7 +355,7 @@ include-dir=/etc/powerdns/pdns.d
 launch=
 </code></pre>
 
-<h3 id="使用-poweradmin-界面创建-master-zone">使用<a href="http://www.poweradmin.org/" title="poweradmin">poweradmin</a>界面创建 master zone</h3>
+<h3 id="使用-poweradmin-界面创建-master-zone">使用 poweradmin 界面创建 master zone</h3>
 
 <p>登录到<a href="http://www.poweradmin.org/" title="poweradmin">poweradmin</a>的网页， 选择Add master zone的菜单，进入新建向导的网页, 在zone里输入域名 some.host</p>
 
@@ -378,7 +378,7 @@ some.host.              3600    IN      SOA     ns1.some.host. hostmaster.some.h
 <h3 id="创建dnssec记录">创建DNSSEC记录</h3>
 
 <ul>
-<li>使用pdnsutil创建DNSSEC</li>
+<li>使用 pdnsutil 创建DNSSEC</li>
 </ul>
 
 <pre><code>pdnsutil secure-zone some.host

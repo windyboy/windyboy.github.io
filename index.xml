@@ -18,7 +18,7 @@
       <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/</guid>
-      <description>概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务</description>
+      <description>概况 起因： cloudxns 停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务里，解决先有鸡</description>
     </item>
     
     <item>
