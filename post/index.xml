@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 后花园</title>
+    <title>Posts on 后花园 - 自留地</title>
     <link>https://windyboy.github.io/post/</link>
-    <description>Recent content in Posts on 后花园</description>
+    <description>Recent content in Posts on 后花园 - 自留地</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>Written by windyboy</copyright>
+    <language>en</language>
+    <copyright>windyboy All Rights Reserved.</copyright>
     <lastBuildDate>Mon, 09 Oct 2017 16:00:00 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/post/index.xml" rel="self" type="application/rss+xml" />
@@ -18,9 +18,7 @@
       <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/</guid>
-      <description>概况  起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题 DNSSEC的key也要注册到注册商 使用postgresql替代mariadb原因在于，在目前这个版本中，日志里总是出现连接断开的警告  安装软件 两台服务器都安装相同的软件, authoritative 和 database
-从官方的repo安装authoritative服务软件  创建pdns的源  # vim /etc/apt/sources.list.d/pdns.list deb [arch=amd64] http://repo.powerdns.com/debian stretch-auth-master main   屏蔽debian自带的pdns  # vim /etc/apt/preferences.d/pdns Package: pdns-* Pin: origin repo.powerdns.com Pin-Priority: 800   引入官方的key  # curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add -   安装服务器软件  # apt-get update # apt-get install pdns-server  其他的系统可以到 https://repo.powerdns.com/ 参考响应的安装指引
-安装数据库  安装postgresql  # apt install postgresql postgresql-client   初始化数据库账号  # sudo -u postgres psql postgres=# create user pdns with password &#39;mypdnspassword&#39;; postgres=# create database pdns owner pdns; postgres=# grant all privileges on database pdns to pdns; postgres=# \q   安装powerdns的backend  # apt install pdns-backend-pgsql  安装过程中会询问数据库用户的信息，根据前面初始化的用户名/密码，填入即可</description>
+      <description>概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务</description>
     </item>
     
     <item>
@@ -29,9 +27,7 @@
       <pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/</guid>
-      <description>概况  apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letsencrypt的免费证书。 要把证书导入keystore, 首先需要使用openssl把证书导出到.p12文件中，然后使用keytool把ca倒入为root(alias root)， 把服务器的证书导入为tomcat(alias tomcat)。  导入证书  前提  已经成功申请到有效的证书(使用letsencrypt 申请有效的服务器证书)。
- 使用 openssl 工具，把证书导出到.p12文件中   # openssl pkcs12 -export -in cert.pem -inkey privkey.pem \ -out cert_and_key.p12 -name tomcat \ -CAfile chain.pem -caname root Enter Export Password: Verifying - Enter Export Password:  提示输入导出密码，这里导出密码，可以直接回车，此时密码为空。 如果输入了密码，则在下面导入的时候需要输入相同的密码
- 使用keytool导入证书和ca   # keytool -importkeystore \ -deststorepass &amp;lt;changeit&amp;gt; -destkeypass &amp;lt;changeit&amp;gt; \ -destkeystore MyDSKeyStore.jks -srckeystore cert_and_key.</description>
+      <description>概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse</description>
     </item>
     
     <item>
@@ -40,19 +36,7 @@
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
       
       <guid>https://windyboy.github.io/post/2016/05/proxy-with-nghttpx-squid/</guid>
-      <description>概况  服务器
-服务器上部署代理工具nghttpx，缓存服务squid
-受限制网络 ==proxy==&amp;gt; nghttpx &amp;gt; squid (缓存) ==&amp;gt; 互联网
- 客户端
-客户端是用https proxy的方式访问服务器，同时服务端开启客户端证书认证，在客户端部署自签证书。对比ss的方式减免了客户端软件的部署。
-https proxy client ==&amp;gt; 服务
- 主要工具
- https proxy 服务器 nghttp2 缓存服务器 squid 客户端证书生成工具 easyrsa 客户端证书导入导出 openssl   安装 这里安装的过程以centos 7为例，其他发行版本可根据实际情况适当
-#cat /etc/redhat-release CentOS Linux release 7.2.1511 (Core)   基础软件
-如果使用epel的源安装，首先安装epel
-# yum install epel-release # yum install openssl git-core  nghttp2 squid
-使用的代理程序是nghttpx, 安装的软件包是nghttp2，nghttp2中包含nghttpx的代理服务程序
-# yum install nghttp2 squid  nghttp2 也可以自编译源码来安装，epel安装的版本是1.</description>
+      <description>概况 服务器 服务器上部署代理工具nghttpx，缓存服务squid 受限制网络 ==proxy==&amp;gt; nghttpx &amp;gt; squid (缓存) ==&amp;gt; 互联网 客户端 客户端是用https proxy的方式</description>
     </item>
     
   </channel>

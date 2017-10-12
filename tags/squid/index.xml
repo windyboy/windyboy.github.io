@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Squid on 后花园</title>
+    <title>Squid on 后花园 - 自留地</title>
     <link>https://windyboy.github.io/tags/squid/</link>
-    <description>Recent content in Squid on 后花园</description>
+    <description>Recent content in Squid on 后花园 - 自留地</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>Written by windyboy</copyright>
+    <language>en</language>
+    <copyright>windyboy All Rights Reserved.</copyright>
     <lastBuildDate>Tue, 24 May 2016 15:13:14 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/tags/squid/index.xml" rel="self" type="application/rss+xml" />
@@ -18,19 +18,7 @@
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
       
       <guid>https://windyboy.github.io/post/2016/05/proxy-with-nghttpx-squid/</guid>
-      <description>概况  服务器
-服务器上部署代理工具nghttpx，缓存服务squid
-受限制网络 ==proxy==&amp;gt; nghttpx &amp;gt; squid (缓存) ==&amp;gt; 互联网
- 客户端
-客户端是用https proxy的方式访问服务器，同时服务端开启客户端证书认证，在客户端部署自签证书。对比ss的方式减免了客户端软件的部署。
-https proxy client ==&amp;gt; 服务
- 主要工具
- https proxy 服务器 nghttp2 缓存服务器 squid 客户端证书生成工具 easyrsa 客户端证书导入导出 openssl   安装 这里安装的过程以centos 7为例，其他发行版本可根据实际情况适当
-#cat /etc/redhat-release CentOS Linux release 7.2.1511 (Core)   基础软件
-如果使用epel的源安装，首先安装epel
-# yum install epel-release # yum install openssl git-core  nghttp2 squid
-使用的代理程序是nghttpx, 安装的软件包是nghttp2，nghttp2中包含nghttpx的代理服务程序
-# yum install nghttp2 squid  nghttp2 也可以自编译源码来安装，epel安装的版本是1.</description>
+      <description>概况 服务器 服务器上部署代理工具nghttpx，缓存服务squid 受限制网络 ==proxy==&amp;gt; nghttpx &amp;gt; squid (缓存) ==&amp;gt; 互联网 客户端 客户端是用https proxy的方式</description>
     </item>
     
   </channel>

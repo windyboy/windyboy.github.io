@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on 后花园</title>
+    <title>Categories on 后花园 - 自留地</title>
     <link>https://windyboy.github.io/categories/</link>
-    <description>Recent content in Categories on 后花园</description>
+    <description>Recent content in Categories on 后花园 - 自留地</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>Written by windyboy</copyright>
+    <language>en</language>
+    <copyright>windyboy All Rights Reserved.</copyright>
     
 	<atom:link href="https://windyboy.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
