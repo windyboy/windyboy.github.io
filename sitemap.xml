@@ -24,14 +24,27 @@
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/tags/authoritative/</loc>
+    <loc>https://windyboy.github.io/categories/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/</loc>
     <lastmod>2017-10-09T16:00:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/categories/</loc>
+    <loc>https://windyboy.github.io/tags/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/authoritative/</loc>
+    <lastmod>2017-10-09T16:00:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -93,14 +106,14 @@
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/post/</loc>
+    <loc>https://windyboy.github.io/tags/powerdns/</loc>
     <lastmod>2017-10-09T16:00:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/tags/powerdns/</loc>
+    <loc>https://windyboy.github.io/tags/powerdns-admin/</loc>
     <lastmod>2017-10-09T16:00:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -123,13 +136,6 @@
   <url>
     <loc>https://windyboy.github.io/tags/ssl/</loc>
     <lastmod>2016-09-28T16:00:00+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/tags/</loc>
-    <lastmod>2017-10-09T16:00:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

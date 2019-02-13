@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -16,63 +16,48 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="windyboy" />
-  <meta name="description" content="概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse" />
-
-  <meta name="keywords" content="后花园, 技术, 娱乐" />
+<meta name="author" content="windyboy" /><meta name="description" content="概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse" /><meta name="keywords" content="Hugo, tech, geek, server" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
 
 
 <link rel="canonical" href="https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/" />
-
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" href="/favicon.ico" />
 <link rel="manifest" href="/manifest.json">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.min.css?v=2.6.2" rel="stylesheet">
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:title" content="tomcat 以 keystore 的方式使用 letsencrypt 证书" />
 <meta property="og:description" content="概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/" />
-
-
-
 <meta property="article:published_time" content="2016-09-28T16:00:00&#43;08:00"/>
 <meta property="article:modified_time" content="2016-09-28T16:00:00&#43;08:00"/>
-
-
-
-
-
-
-
-
-
-
 
 <meta itemprop="name" content="tomcat 以 keystore 的方式使用 letsencrypt 证书">
 <meta itemprop="description" content="概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse">
 
 
+<meta itemprop="datePublished" content="2016-09-28T16:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2016-09-28T16:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="558">
+<meta itemprop="wordCount" content="588">
 
 
 
 <meta itemprop="keywords" content="tomcat,ssl,keystore,letsencrypt," />
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="tomcat 以 keystore 的方式使用 letsencrypt 证书"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="tomcat 以 keystore 的方式使用 letsencrypt 证书"/>
 <meta name="twitter:description" content="概况 apache tomcat 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式keystore, 并不能直接使用letse"/>
 
 <!--[if lte IE 9]>
@@ -105,7 +90,7 @@
       </a><a href="/tags/">
         <li class="mobile-menu-item">标签</li>
       </a><a href="/categories/">
-        <li class="mobile-menu-item">类别</li>
+        <li class="mobile-menu-item">分类</li>
       </a>
   </ul>
 </nav>
@@ -124,7 +109,7 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/tags/">标签</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">类别</a>
+        <a class="menu-item-link" href="/categories/">分类</a>
       </li>
   </ul>
 </nav>
@@ -141,18 +126,16 @@
       <div class="post-meta">
         <span class="post-time"> 2016-09-28 </span>
         <div class="post-category">
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          </div>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+            </div>
         
       </div>
     </header>
 
-    
-    
-<div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content">
-      <nav id="TableOfContents">
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
 <ul>
 <li>
 <ul>
@@ -165,8 +148,6 @@
 </nav>
   </div>
 </div>
-
-    
     <div class="post-content">
       
 
@@ -188,45 +169,75 @@
 <ul>
 <li>使用 openssl 工具，把证书导出到.p12文件中</li>
 </ul>
-
-<pre><code>  # openssl pkcs12 -export -in cert.pem -inkey privkey.pem \
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">  # openssl pkcs12 -export -in cert.pem -inkey privkey.pem \
   -out cert_and_key.p12 -name tomcat \
   -CAfile chain.pem -caname root
   Enter Export Password:
-  Verifying - Enter Export Password:
-</code></pre>
-
+  Verifying - Enter Export Password:</pre></td></tr></table>
+</div>
+</div>
 <p>提示输入导出密码，这里导出密码，可以直接回车，此时密码为空。 如果输入了密码，则在下面导入的时候需要输入相同的密码</p>
 
 <ul>
 <li>使用keytool导入证书和ca</li>
 </ul>
-
-<pre><code>  # keytool -importkeystore \
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">  # keytool -importkeystore \
   -deststorepass &lt;changeit&gt; -destkeypass &lt;changeit&gt; \
   -destkeystore MyDSKeyStore.jks -srckeystore cert_and_key.p12 \
   -srcstoretype PKCS12 \
-  -srcstorepass &lt;theExportPasswordAbove&gt; -alias tomcat
-</code></pre>
-
+  -srcstorepass &lt;theExportPasswordAbove&gt; -alias tomcat</pre></td></tr></table>
+</div>
+</div>
 <p>注意deststorepass和destkeypass必须相同，否则tomcat无法获取证书</p>
-
-<pre><code>  # keytool -import -trustcacerts \
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">  # keytool -import -trustcacerts \
   -srcstorepass &lt;theExportPasswordAbove&gt; \
-  -alias root -file chain.pem -keystore MyKeyStore.jks
-</code></pre>
-
+  -alias root -file chain.pem -keystore MyKeyStore.jks</pre></td></tr></table>
+</div>
+</div>
 <ul>
 <li>配置<a href="https://tomcat.apache.org/" title="apache tomcat">apache tomcat</a></li>
 </ul>
-
-<pre><code>  # vim conf/server.xml
-  &lt;Connector port=&quot;443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;
-            maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;
-            keystoreFile=&quot;/&lt;path&gt;/MyKeyStore.jks&quot; keystorePass=&quot;&lt;changeit&gt;&quot;
-               clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">  # vim conf/server.xml
+  &lt;Connector port=&#34;443&#34; protocol=&#34;org.apache.coyote.http11.Http11Protocol&#34;
+            maxThreads=&#34;150&#34; SSLEnabled=&#34;true&#34; scheme=&#34;https&#34; secure=&#34;true&#34;
+            keystoreFile=&#34;/&lt;path&gt;/MyKeyStore.jks&#34; keystorePass=&#34;&lt;changeit&gt;&#34;
+               clientAuth=&#34;false&#34; sslProtocol=&#34;TLS&#34; /&gt;</pre></td></tr></table>
+</div>
+</div>
 <p>keystoreFile 是MyKeyStore.jks文件的绝对路径</p>
 
 <p><strong><em>keystorePass 是MyKeyStore.jks的storepasss以及keypass, 必须相同</em></strong></p>
@@ -251,93 +262,85 @@
 
     </div>
 
-    
-    
-
-    
-    
-
-    <footer class="post-footer">
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">windyboy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2016-09-28</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
       <div class="post-tags">
-          
           <a href="/tags/tomcat/">tomcat</a>
-          
           <a href="/tags/ssl/">ssl</a>
-          
           <a href="/tags/keystore/">keystore</a>
-          
           <a href="/tags/letsencrypt/">letsencrypt</a>
-          
-        </div>
-
-      
+          </div>
       <nav class="post-nav">
-        
-          <a class="prev" href="/post/2017/10/setup-powerdns-authoritative-with-dnssec/">
+        <a class="prev" href="/post/2017/10/setup-powerdns-authoritative-with-dnssec/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">使用powerdns搭建自己安全的域名解析服务</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
-        
-          <a class="next" href="/post/2016/05/proxy-with-nghttpx-squid/">
+        <a class="next" href="/post/2016/05/proxy-with-nghttpx-squid/">
             <span class="next-text nav-default">nghttpx搭配squid科学浏览</span>
-            <span class="prev-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
     </footer>
   </article>
         </div>
-        
-  <div id="disqus_thread"></div>
+        <div id="disqus_thread"></div>
     <script type="text/javascript">
     (function() {
-        
-        
-        if (window.location.hostname === 'localhost') return;
+      
+      
+      if (window.location.hostname === 'localhost') return;
 
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'windyboy';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'windyboy';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    <a href="http://disqus.com/" class="dsq-brlink" target="_blank">comments powered by <span class="logo-disqus">Disqus</span></a>
 
-  
-      </div>  
+      </div>
     </main>
 
     <footer id="footer" class="footer">
       <div class="social-links">
       <a href="mailto:windyboy@gmail.com" class="iconfont icon-email" title="email"></a>
       <a href="https://twitter.com/windysylph" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="https://github.com/windyboy" class="iconfont icon-github" title="github"></a>
       <a href="https://weibo.com/windysylph" class="iconfont icon-weibo" title="weibo"></a>
-      <a href="https://www.douban.com/people/windyboy" class="iconfont icon-douban" title="douban"></a>
   <a href="https://windyboy.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
+  
+
   <span class="copyright-year">
     &copy; 
-    
-      2016 - 
-    2017
+    2016 - 
+    2019
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
-    <span class="author">windyboy All Rights Reserved.</span>
+    <span class="author">windyboy © 2016-2019 版权所有</span>
   </span>
 </div>
     </footer>
@@ -347,19 +350,26 @@
     </div>
   </div>
   
-<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
-<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
-  
-<script type="text/javascript" src="/dist/even.min.js?v=2.6.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
 
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-78513355-1', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-78513355-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
 
 
 
