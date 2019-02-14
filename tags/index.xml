@@ -14,7 +14,7 @@
     <item>
       <title>authoritative</title>
       <link>https://windyboy.github.io/tags/authoritative/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/authoritative/</guid>
       <description></description>
@@ -23,7 +23,7 @@
     <item>
       <title>cloudxns</title>
       <link>https://windyboy.github.io/tags/cloudxns/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/cloudxns/</guid>
       <description></description>
@@ -32,7 +32,7 @@
     <item>
       <title>dns</title>
       <link>https://windyboy.github.io/tags/dns/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/dns/</guid>
       <description></description>
@@ -41,7 +41,7 @@
     <item>
       <title>dnssec</title>
       <link>https://windyboy.github.io/tags/dnssec/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/dnssec/</guid>
       <description></description>
@@ -75,6 +75,15 @@
     </item>
     
     <item>
+      <title>master</title>
+      <link>https://windyboy.github.io/tags/master/</link>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/master/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>nghttpx</title>
       <link>https://windyboy.github.io/tags/nghttpx/</link>
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
@@ -86,7 +95,7 @@
     <item>
       <title>postgresql</title>
       <link>https://windyboy.github.io/tags/postgresql/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/postgresql/</guid>
       <description></description>
@@ -95,7 +104,7 @@
     <item>
       <title>powerdns</title>
       <link>https://windyboy.github.io/tags/powerdns/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/powerdns/</guid>
       <description></description>
@@ -104,7 +113,7 @@
     <item>
       <title>powerdns-admin</title>
       <link>https://windyboy.github.io/tags/powerdns-admin/</link>
-      <pubDate>Mon, 09 Oct 2017 16:00:00 +0800</pubDate>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/powerdns-admin/</guid>
       <description></description>
@@ -116,6 +125,15 @@
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>slave</title>
+      <link>https://windyboy.github.io/tags/slave/</link>
+      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/slave/</guid>
       <description></description>
     </item>
     

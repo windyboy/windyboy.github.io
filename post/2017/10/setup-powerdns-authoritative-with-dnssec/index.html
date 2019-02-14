@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="windyboy" /><meta name="description" content="概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务" /><meta name="keywords" content="Hugo, tech, geek, server" />
+<meta name="author" content="windyboy" /><meta name="description" content="概况 解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务 两个NS服务器IP地址要注册到域名注册商的服务里，解决" /><meta name="keywords" content="Hugo, tech, geek, server" />
 
 
 
@@ -39,26 +39,26 @@
 
 
 <meta property="og:title" content="使用powerdns搭建自己安全的域名解析服务" />
-<meta property="og:description" content="概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务" />
+<meta property="og:description" content="概况 解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务 两个NS服务器IP地址要注册到域名注册商的服务里，解决" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/" />
-<meta property="article:published_time" content="2017-10-09T16:00:00&#43;08:00"/>
-<meta property="article:modified_time" content="2017-10-09T16:00:00&#43;08:00"/>
+<meta property="article:published_time" content="2019-02-14T10:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2019-02-14T10:00:00&#43;08:00"/>
 
 <meta itemprop="name" content="使用powerdns搭建自己安全的域名解析服务">
-<meta itemprop="description" content="概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务">
+<meta itemprop="description" content="概况 解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务 两个NS服务器IP地址要注册到域名注册商的服务里，解决">
 
 
-<meta itemprop="datePublished" content="2017-10-09T16:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2017-10-09T16:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="2189">
+<meta itemprop="datePublished" content="2019-02-14T10:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2019-02-14T10:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="2143">
 
 
 
-<meta itemprop="keywords" content="dns,dnssec,powerdns,postgresql,authoritative,cloudxns,powerdns-admin," />
+<meta itemprop="keywords" content="dns,dnssec,powerdns,postgresql,authoritative,cloudxns,powerdns-admin,master,slave,dnssec," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="使用powerdns搭建自己安全的域名解析服务"/>
-<meta name="twitter:description" content="概况 起因： cloudxns停止了面向个人的服务 解析服务需要提供两个独立的IP，一主一从提供解析服务 两个服务器IP地址要注册到域名注册商的服务"/>
+<meta name="twitter:description" content="概况 解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务 两个NS服务器IP地址要注册到域名注册商的服务里，解决"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -124,7 +124,7 @@
       <h1 class="post-title">使用powerdns搭建自己安全的域名解析服务</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2017-10-09 </span>
+        <span class="post-time"> 2019-02-14 </span>
         <div class="post-category">
             <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
             </div>
@@ -169,11 +169,10 @@
 <h2 id="概况">概况</h2>
 
 <ul>
-<li>起因： <a href="https://www.cloudxns.net/" title="cloudxns">cloudxns</a>停止了面向个人的服务</li>
-<li>解析服务需要提供两个独立的IP，一主一从提供解析服务</li>
-<li>两个服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题</li>
+<li>解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务</li>
+<li>两个NS服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题</li>
 <li>DNSSEC的key也要注册到注册商</li>
-<li>使用<a href="https://www.postgresql.org/" title="postgresql">postgresql</a>替代<a href="https://mariadb.org/" title="mariadb">mariadb</a>原因在于，在目前这个版本中，日志里总是出现连接断开的警告</li>
+<li>安装 <a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin</a> 管理域名</li>
 </ul>
 
 <h2 id="安装软件">安装软件</h2>
@@ -194,7 +193,7 @@
 <td class="lntd">
 <pre class="chroma"># vim /etc/apt/sources.list.d/pdns.list
 
-deb [arch=amd64] http://repo.powerdns.com/debian stretch-auth-master main</pre></td></tr></table>
+deb [arch=amd64] http://repo.powerdns.com/debian stretch-rec-41 main</pre></td></tr></table>
 </div>
 </div>
 <ul>
@@ -969,7 +968,7 @@ some.host.              86400 IN RRSIG NSEC 13 2 86400 (
   </p>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
-    <span class="item-content">2017-10-09</span>
+    <span class="item-content">2019-02-14</span>
   </p>
   
   
@@ -982,6 +981,9 @@ some.host.              86400 IN RRSIG NSEC 13 2 86400 (
           <a href="/tags/authoritative/">authoritative</a>
           <a href="/tags/cloudxns/">cloudxns</a>
           <a href="/tags/powerdns-admin/">powerdns-admin</a>
+          <a href="/tags/master/">master</a>
+          <a href="/tags/slave/">slave</a>
+          <a href="/tags/dnssec/">dnssec</a>
           </div>
       <nav class="post-nav">
         
