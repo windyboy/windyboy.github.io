@@ -7,12 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2019 版权所有</copyright>
+    <lastBuildDate>Thu, 14 Feb 2019 10:00:00 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>authoritative</title>
+      <title>Authoritative</title>
       <link>https://windyboy.github.io/tags/authoritative/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
@@ -21,7 +22,7 @@
     </item>
     
     <item>
-      <title>cloudxns</title>
+      <title>Cloudxns</title>
       <link>https://windyboy.github.io/tags/cloudxns/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
@@ -30,7 +31,7 @@
     </item>
     
     <item>
-      <title>dns</title>
+      <title>Dns</title>
       <link>https://windyboy.github.io/tags/dns/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
@@ -39,7 +40,7 @@
     </item>
     
     <item>
-      <title>dnssec</title>
+      <title>Dnssec</title>
       <link>https://windyboy.github.io/tags/dnssec/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
@@ -48,7 +49,7 @@
     </item>
     
     <item>
-      <title>http2</title>
+      <title>Http2</title>
       <link>https://windyboy.github.io/tags/http2/</link>
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
       
@@ -57,7 +58,7 @@
     </item>
     
     <item>
-      <title>keystore</title>
+      <title>Keystore</title>
       <link>https://windyboy.github.io/tags/keystore/</link>
       <pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate>
       
@@ -66,7 +67,7 @@
     </item>
     
     <item>
-      <title>letsencrypt</title>
+      <title>Letsencrypt</title>
       <link>https://windyboy.github.io/tags/letsencrypt/</link>
       <pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate>
       
@@ -75,7 +76,7 @@
     </item>
     
     <item>
-      <title>master</title>
+      <title>Master</title>
       <link>https://windyboy.github.io/tags/master/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
@@ -84,7 +85,7 @@
     </item>
     
     <item>
-      <title>nghttpx</title>
+      <title>Nghttpx</title>
       <link>https://windyboy.github.io/tags/nghttpx/</link>
       <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
       
@@ -93,74 +94,11 @@
     </item>
     
     <item>
-      <title>postgresql</title>
+      <title>Postgresql</title>
       <link>https://windyboy.github.io/tags/postgresql/</link>
       <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/postgresql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>powerdns</title>
-      <link>https://windyboy.github.io/tags/powerdns/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/powerdns/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>powerdns-admin</title>
-      <link>https://windyboy.github.io/tags/powerdns-admin/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/powerdns-admin/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>proxy</title>
-      <link>https://windyboy.github.io/tags/proxy/</link>
-      <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/proxy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>slave</title>
-      <link>https://windyboy.github.io/tags/slave/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/slave/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>squid</title>
-      <link>https://windyboy.github.io/tags/squid/</link>
-      <pubDate>Tue, 24 May 2016 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/squid/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ssl</title>
-      <link>https://windyboy.github.io/tags/ssl/</link>
-      <pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/ssl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tomcat</title>
-      <link>https://windyboy.github.io/tags/tomcat/</link>
-      <pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/tomcat/</guid>
       <description></description>
     </item>
     
