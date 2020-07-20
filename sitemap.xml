@@ -3,7 +3,77 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://windyboy.github.io/tags/ca/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://windyboy.github.io/categories/</loc>
+    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/certificate/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/docker/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/k8s/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/kind/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/2020/07/kind-add-self-signed-ca/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/kubernetes/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/</loc>
+    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/registry/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/selfsigned/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/</loc>
+    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/x509/</loc>
+    <lastmod>2020-07-20T10:20:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/</loc>
+    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2020-07-20T11:10:03+08:00</lastmod>
   </url>
   
@@ -23,32 +93,12 @@
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/post/</loc>
-    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://windyboy.github.io/tags/proxy/</loc>
     <lastmod>2020-07-20T11:10:03+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://windyboy.github.io/tags/squid/</loc>
-    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/tags/</loc>
-    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/</loc>
-    <lastmod>2020-07-20T11:10:03+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2020-07-20T11:10:03+08:00</lastmod>
   </url>
   

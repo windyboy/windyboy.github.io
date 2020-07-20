@@ -7,10 +7,91 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Fri, 17 Jul 2020 15:13:14 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2020 10:20:16 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ca</title>
+      <link>https://windyboy.github.io/tags/ca/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/ca/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>certificate</title>
+      <link>https://windyboy.github.io/tags/certificate/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/certificate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://windyboy.github.io/tags/docker/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>k8s</title>
+      <link>https://windyboy.github.io/tags/k8s/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kind</title>
+      <link>https://windyboy.github.io/tags/kind/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/kind/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://windyboy.github.io/tags/kubernetes/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>registry</title>
+      <link>https://windyboy.github.io/tags/registry/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/registry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>selfsigned</title>
+      <link>https://windyboy.github.io/tags/selfsigned/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/selfsigned/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>x509</title>
+      <link>https://windyboy.github.io/tags/x509/</link>
+      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/x509/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>http2</title>
@@ -18,87 +99,6 @@
       <pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/http2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nghttpx</title>
-      <link>https://windyboy.github.io/tags/nghttpx/</link>
-      <pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/nghttpx/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>proxy</title>
-      <link>https://windyboy.github.io/tags/proxy/</link>
-      <pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/proxy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>squid</title>
-      <link>https://windyboy.github.io/tags/squid/</link>
-      <pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/squid/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>authoritative</title>
-      <link>https://windyboy.github.io/tags/authoritative/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/authoritative/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cloudxns</title>
-      <link>https://windyboy.github.io/tags/cloudxns/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/cloudxns/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>dns</title>
-      <link>https://windyboy.github.io/tags/dns/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/dns/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>dnssec</title>
-      <link>https://windyboy.github.io/tags/dnssec/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/dnssec/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>master</title>
-      <link>https://windyboy.github.io/tags/master/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/master/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>postgresql</title>
-      <link>https://windyboy.github.io/tags/postgresql/</link>
-      <pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/postgresql/</guid>
       <description></description>
     </item>
     
