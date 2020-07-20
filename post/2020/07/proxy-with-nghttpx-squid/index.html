@@ -10,8 +10,8 @@
 <meta itemprop="name" content="nghttpx搭配squid科学浏览（更新debian）">
 <meta itemprop="description" content="概况 使用通用的https代理访问互联网 受限制网络 ==&gt; http proxy ==&gt; nghttpx server ==&gt; squid ==&gt; 互联网 服务器 服务器上部署代理工具 nghttp2（nghttpx server">
 <meta itemprop="datePublished" content="2020-07-17T15:13:14&#43;08:00" />
-<meta itemprop="dateModified" content="2020-07-17T15:53:34&#43;08:00" />
-<meta itemprop="wordCount" content="1488">
+<meta itemprop="dateModified" content="2020-07-20T11:07:38&#43;08:00" />
+<meta itemprop="wordCount" content="1478">
 
 
 
@@ -20,7 +20,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://windyboy.github.io/post/2020/07/proxy-with-nghttpx-squid/" />
 <meta property="article:published_time" content="2020-07-17T15:13:14+08:00" />
-<meta property="article:modified_time" content="2020-07-17T15:53:34+08:00" />
+<meta property="article:modified_time" content="2020-07-20T11:07:38+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="nghttpx搭配squid科学浏览（更新debian）"/>
 <meta name="twitter:description" content="概况 使用通用的https代理访问互联网 受限制网络 ==&gt; http proxy ==&gt; nghttpx server ==&gt; squid ==&gt; 互联网 服务器 服务器上部署代理工具 nghttp2（nghttpx server"/>
@@ -102,47 +102,34 @@
 <pre><code>#cat /etc/redhat-release 
 CentOS Linux release 7.2.1511 (Core)
 </code></pre><ul>
-<li>
-<p>基础软件(编译)</p>
+<li>基础软件(编译)</li>
+</ul>
 <p>如果使用epel的源安装，首先安装epel</p>
 <pre><code># yum install epel-release
 # yum install openssl git-core
-</code></pre><pre><code>
-</code></pre></li>
-<li>
-<p><a href="https://nghttp2.org" title="nghttp2">nghttp2</a> <a href="http://www.squid-cache.org" title="squid">squid</a></p>
+</code></pre><ul>
+<li><a href="https://nghttp2.org" title="nghttp2">nghttp2</a> <a href="http://www.squid-cache.org" title="squid">squid</a></li>
+</ul>
 <p>使用的代理程序是nghttpx, 安装的软件包是nghttp2，nghttp2中包含nghttpx的代理服务程序</p>
 <pre><code># yum install nghttp2 squid
-</code></pre><pre><code>
-  nghttp2 也可以自编译源码来安装，epel安装的版本是1.7,通过编译可以安装1.9
-
-  &gt;
-  &gt;```
-  &gt;sudo yum groupinstall &quot;Development Tools&quot;
-  &gt;sudo yum install libev libev-devel zlib zlib-devel openssl openssl-devel git
-  &gt;git clone https://github.com/nghttp2/nghttp2.git
-  &gt;cd nghttp2
-  &gt;autoreconf -i
-  &gt;automake
-  &gt;autoconf
-  &gt;./configure
-  &gt;make
-  &gt;sudo make install
-  &gt;```
-  &gt;
-
-  默认安装位置是 ```/usr/local/bin```
-
-  ***在centos 7的环境正不能使用最新版的1.11.0-DEV，需要使用1.9.x的版本。在clone项目以后需要checkout 1.9.x的版本***
-
-  ```git checkout v1.9.x```
-
-  然后再执行编译的操作,编译安装完成以后，检查一下版本
-
-  ```# /usr/local/bin/nghttpx -v```
-
-</code></pre></li>
-</ul>
+</code></pre><p>nghttp2 也可以自编译源码来安装，epel安装的版本是1.7,通过编译可以安装1.9</p>
+<blockquote>
+<pre><code>sudo yum groupinstall &quot;Development Tools&quot;
+sudo yum install libev libev-devel zlib zlib-devel openssl openssl-devel git
+git clone https://github.com/nghttp2/nghttp2.git
+cd nghttp2
+autoreconf -i
+automake
+autoconf
+./configure
+make
+sudo make install
+</code></pre></blockquote>
+<p>默认安装位置是 <code>/usr/local/bin</code></p>
+<p><em><strong>在centos 7的环境正不能使用最新版的1.11.0-DEV，需要使用1.9.x的版本。在clone项目以后需要checkout 1.9.x的版本</strong></em></p>
+<p><code>git checkout v1.9.x</code></p>
+<p>然后再执行编译的操作,编译安装完成以后，检查一下版本</p>
+<p><code># /usr/local/bin/nghttpx -v</code></p>
 <h3 id="debian-10-ubuntu">debian 10 （ubuntu）<a href="#debian-10-ubuntu" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <pre><code># lsb_release -a
 No LSB modules are available.
@@ -156,21 +143,18 @@ sudo apt install python-certbot-apache -t buster-backports
 </code></pre><p>安装<a href="https://certbot.eff.org" title="certbot">certbot</a>会附带安装一个apache的服务器，需要注意，如果有web的服务，需要禁止掉，申请证书的时候可以临时启动一个
 编译（略）</p>
 <ul>
-<li>
-<p><a href="https://github.com/OpenVPN/easy-rsa" title="easyrsa">easyrsa</a></p>
+<li><a href="https://github.com/OpenVPN/easy-rsa" title="easyrsa">easyrsa</a></li>
+</ul>
 <p>克隆easyrsa源码</p>
 <pre><code># git clone https://github.com/OpenVPN/easy-rsa.git
-</code></pre><pre><code>	
-  把easyrsa 复制到/opt/中完成安装
-</code></pre><pre><code>  # cd easy-rsa/
-  # cp -r easyrsa3 /opt/
-</code></pre><pre><code></code></pre></li>
-</ul>
-<h2 id="配置">配置<a href="#配置" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+</code></pre><p>把easyrsa 复制到/opt/中完成安装</p>
+<pre><code># cd easy-rsa/
+# cp -r easyrsa3 /opt/
+</code></pre><h2 id="配置">配置<a href="#配置" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <h3 id="证书">证书<a href="#证书" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <ul>
-<li>
-<p>https 证书</p>
+<li>https 证书</li>
+</ul>
 <p>服务器端证书可以使用<a href="https://letsencrypt.org" title="letsencrypt">letsencrypt</a>提供的免费证书。</p>
 <p><del>配置<a href="https://letsencrypt.org" title="letsencrypt">letsencrypt</a>证书的时候可以使用<a href="https://github.com/lukas2511/letsencrypt.sh">letsencrypt.sh</a>的脚本,可以简化配置的过程。</del></p>
 <p>使用<a href="https://certbot.eff.org" title="certbot">certbot</a>配置</p>
@@ -180,9 +164,7 @@ How would you like to authenticate with the ACME CA?
 2: Nginx Web Server plugin (nginx)
 3: Spin up a temporary webserver (standalone) 
 4: Place files in webroot directory (webroot)
-</code></pre><pre><code></code></pre></li>
-</ul>
-<p>申请证书的时候需要在80端口开启一个web服务，如果使用之前安装的apache可以选1，同样也可以选择nginx，如果没有web服务，也可以选3，临时启动一个服务</p>
+</code></pre><p>申请证书的时候需要在80端口开启一个web服务，如果使用之前安装的apache可以选1，同样也可以选择nginx，如果没有web服务，也可以选3，临时启动一个服务</p>
 <ul>
 <li>客户端验证证书</li>
 </ul>
@@ -239,49 +221,41 @@ strip-incoming-x-forwarded-for=yes
 </code></pre></li>
 <li>
 <p>ngttpx服务</p>
-<pre><code>$ sudo vi /etc/systemd/system/nghttpx.service
-</code></pre><pre><code>  编辑内容
-
-</code></pre><pre><code>  [Unit] 
-  Description=nghttpx 
-  After=network.target 
-	 
-  [Service] 
-  Type=simple 
-  ExecStart=/usr/local/bin/nghttpx --conf=/etc/nghttpx/nghttpx.conf
-  ExecReload=/bin/kill -SIGUSR1 ${MAINPID}
-  ExecStop=/bin/kill -SIGQUIT ${MAINPID}
-	 
-  [Install] 
-  WantedBy=multi-user.target
-</code></pre><pre><code>
-  服务
-</code></pre><pre><code>  $ sudo systemctl daemon-reload
-  $ sudo systemctl start nghttpx
-  $ sudo systemctl enable nghttpx
-</code></pre><pre><code>
-</code></pre></li>
+</li>
 </ul>
-<h3 id="缓存">缓存<a href="#缓存" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>$ sudo vi /etc/systemd/system/nghttpx.service
+</code></pre><p>编辑内容</p>
+<pre><code>[Unit] 
+Description=nghttpx 
+After=network.target 
+	
+[Service] 
+Type=simple 
+ExecStart=/usr/local/bin/nghttpx --conf=/etc/nghttpx/nghttpx.conf
+ExecReload=/bin/kill -SIGUSR1 ${MAINPID}
+ExecStop=/bin/kill -SIGQUIT ${MAINPID}
+	
+[Install] 
+WantedBy=multi-user.target
+</code></pre><p>服务</p>
+<pre><code>$ sudo systemctl daemon-reload
+$ sudo systemctl start nghttpx
+$ sudo systemctl enable nghttpx
+</code></pre><h3 id="缓存">缓存<a href="#缓存" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>通过yum安装的squid服务，默认配置基本上已经满足要求，需要做一点小修改</p>
 <ul>
-<li>
-<p>编辑配置</p>
-<pre><code>$ sudo vi /etc/squid/squid.conf
-</code></pre><pre><code>
-  在配置文件尾部加上
-</code></pre><pre><code>  via off
-  forwarded_for delete
-  access_log none
-</code></pre><pre><code>
-</code></pre></li>
-<li>
-<p>重启服务</p>
-<pre><code>$ sudo systemctl restart squid
-</code></pre><pre><code>
-</code></pre></li>
+<li>编辑配置</li>
 </ul>
-<h2 id="参考资料">参考资料<a href="#参考资料" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<pre><code>$ sudo vi /etc/squid/squid.conf
+</code></pre><p>在配置文件尾部加上</p>
+<pre><code>via off
+forwarded_for delete
+access_log none
+</code></pre><ul>
+<li>重启服务</li>
+</ul>
+<pre><code>$ sudo systemctl restart squid
+</code></pre><h2 id="参考资料">参考资料<a href="#参考资料" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <ul>
 <li>nghttpx 官方指引 <a href="https://nghttp2.org/documentation/nghttpx-howto.html">https://nghttp2.org/documentation/nghttpx-howto.html</a></li>
 <li>谷歌上另外一篇参考的nghttpx+squid <a href="https://wzyboy.im/post/1052.html">https://wzyboy.im/post/1052.html</a></li>
