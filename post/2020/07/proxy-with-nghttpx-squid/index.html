@@ -275,7 +275,7 @@ access_log none
 	var remark_config = {
 		host: "https://remark.windy.me",
         site_id: "backyard",
-        components: ['embed', 'last-comments'],
+        components: ['embed'],
 		url: "https://windyboy.github.io/post/2020/07/proxy-with-nghttpx-squid/",
         locale: "cn",
         max_shown_comments: 10,
@@ -291,7 +291,6 @@ access_log none
 	  })(remark_config.components || ['embed']);
    </script>
 <div id="remark42" ></div>
-<div class="remark42__last-comments" data-max="50"></div>
 
 		</div>
 	</main>
