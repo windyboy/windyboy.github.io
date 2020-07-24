@@ -3,13 +3,8 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://windyboy.github.io/tags/ca/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://windyboy.github.io/categories/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -20,6 +15,76 @@
                 hreflang="cn"
                 href="https://windyboy.github.io/categories/"
                 />
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/comments/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/disqus/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/hugo/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/remark42/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://windyboy.github.io/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://windyboy.github.io/tags/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/post/2020/07/setup-remark42/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://windyboy.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://windyboy.github.io/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://windyboy.github.io/tags/ca/</loc>
+    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
   </url>
   
   <url>
@@ -53,11 +118,6 @@
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/post/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://windyboy.github.io/tags/registry/</loc>
     <lastmod>2020-07-22T14:25:01+08:00</lastmod>
   </url>
@@ -68,42 +128,7 @@
   </url>
   
   <url>
-    <loc>https://windyboy.github.io/tags/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://windyboy.github.io/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="cn"
-                href="https://windyboy.github.io/tags/"
-                />
-  </url>
-  
-  <url>
     <loc>https://windyboy.github.io/tags/x509/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/</loc>
-    <lastmod>2020-07-22T14:25:01+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://windyboy.github.io/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="cn"
-                href="https://windyboy.github.io/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2020-07-22T14:25:01+08:00</lastmod>
   </url>
   

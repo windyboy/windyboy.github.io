@@ -6,10 +6,19 @@
     <description>Recent content in 技术 on 后花园</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Mon, 20 Jul 2020 10:20:16 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2020 13:56:31 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用 Remark42 实现自建用户留言</title>
+      <link>https://windyboy.github.io/post/2020/07/setup-remark42/</link>
+      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/post/2020/07/setup-remark42/</guid>
+      <description>概况 原来使用hugo自带的disqus插件实现用户留言，默认情况下感觉要读取的东西太多，于是打算找一个替代产品 最好是自建服务，装载要比dis</description>
+    </item>
     
     <item>
       <title>Kind添加私有仓库自签名CA证书</title>

@@ -6,10 +6,46 @@
     <description>Recent content in Tags on 后花园</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Mon, 20 Jul 2020 10:20:16 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2020 13:56:31 +0800</lastBuildDate>
     
 	<atom:link href="https://windyboy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>comments</title>
+      <link>https://windyboy.github.io/tags/comments/</link>
+      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/comments/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>disqus</title>
+      <link>https://windyboy.github.io/tags/disqus/</link>
+      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/disqus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hugo</title>
+      <link>https://windyboy.github.io/tags/hugo/</link>
+      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>remark42</title>
+      <link>https://windyboy.github.io/tags/remark42/</link>
+      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/remark42/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>ca</title>
@@ -62,42 +98,6 @@
       <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/kubernetes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>registry</title>
-      <link>https://windyboy.github.io/tags/registry/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/registry/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>selfsigned</title>
-      <link>https://windyboy.github.io/tags/selfsigned/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/selfsigned/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>x509</title>
-      <link>https://windyboy.github.io/tags/x509/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/x509/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>http2</title>
-      <link>https://windyboy.github.io/tags/http2/</link>
-      <pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/http2/</guid>
       <description></description>
     </item>
     
