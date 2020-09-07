@@ -10,8 +10,8 @@
 <meta itemprop="name" content="Drone CI 解决自签名证书的信任问题">
 <meta itemprop="description" content="概述 自建的系统如果没有使用公网资源，多数都是采用自签名的方式发放证书。最大的问题几乎就是自签名的信任问题，几乎成了自建工作环境最大的痛。大家">
 <meta itemprop="datePublished" content="2020-08-28T12:39:12&#43;08:00" />
-<meta itemprop="dateModified" content="2020-08-28T12:39:12&#43;08:00" />
-<meta itemprop="wordCount" content="305">
+<meta itemprop="dateModified" content="2020-09-07T14:58:55&#43;08:00" />
+<meta itemprop="wordCount" content="294">
 
 
 
@@ -20,7 +20,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://windyboy.github.io/post/2020/08/drone-ci-x509-issue/" />
 <meta property="article:published_time" content="2020-08-28T12:39:12+08:00" />
-<meta property="article:modified_time" content="2020-08-28T12:39:12+08:00" /><meta property="og:site_name" content="后花园" />
+<meta property="article:modified_time" content="2020-09-07T14:58:55+08:00" /><meta property="og:site_name" content="后花园" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Drone CI 解决自签名证书的信任问题"/>
 <meta name="twitter:description" content="概述 自建的系统如果没有使用公网资源，多数都是采用自签名的方式发放证书。最大的问题几乎就是自签名的信任问题，几乎成了自建工作环境最大的痛。大家"/>
@@ -80,13 +80,13 @@
 <li>push docker 镜像， release 发布证书不信任</li>
 </ol>
 <h2 id="解决方法">解决方法<a href="#解决方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<h3 id="对于默认的clone">对于默认的clone<a href="#对于默认的clone" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="clone">clone<a href="#clone" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <p>如果不是把clone作为一个step，可以直接使用skip_verify: true忽略验证</p>
 <pre><code>clone:
   tags: true
   skip_verify: true
 </code></pre><p>当然也可以使用下面挂载主机证书的方法</p>
-<h3 id="其他证书不信任">其他证书不信任<a href="#其他证书不信任" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="证书不信任">证书不信任<a href="#证书不信任" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <ol>
 <li>首先把登陆drone的用户设置成admin
 在drone server启动的环境变量中设置</li>
