@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Wed, 28 Sep 2016 16:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://windyboy.github.io/tags/tomcat/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 28 Sep 2016 16:00:00 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/tomcat/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>tomcat 以 keystore 的方式使用 letsencrypt 证书</title>
       <link>https://windyboy.github.io/post/2016/09/tomcat-keystore-using-letsencrypt-certs/</link>

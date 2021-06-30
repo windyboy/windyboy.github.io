@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Thu, 14 Feb 2019 10:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://windyboy.github.io/tags/cloudxns/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 14 Feb 2019 10:00:00 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/cloudxns/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用powerdns搭建自己安全的域名解析服务</title>
       <link>https://windyboy.github.io/post/2017/10/setup-powerdns-authoritative-with-dnssec/</link>
