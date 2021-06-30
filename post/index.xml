@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Fri, 28 Aug 2020 12:39:12 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Jun 2021 16:59:45 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Urfave Cli 从配置文件读取参数</title>
+      <link>https://windyboy.github.io/post/2021/06/urfave-cli-read-config-file/</link>
+      <pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/post/2021/06/urfave-cli-read-config-file/</guid>
+      <description>概述 urfavecli 的使用文档中关于从外部资源文件读取参数的说明比较模糊，从github的issues中也看到用户提到这个问题并提了PR，但现在这个版本依</description>
+    </item>
+    
     <item>
       <title>Drone CI 解决自签名证书的信任问题</title>
       <link>https://windyboy.github.io/post/2020/08/drone-ci-x509-issue/</link>

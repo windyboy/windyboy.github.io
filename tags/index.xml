@@ -7,7 +7,43 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>windyboy © 2016-2020 版权所有</copyright>
-    <lastBuildDate>Fri, 28 Aug 2020 12:39:12 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Jun 2021 16:59:45 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cli</title>
+      <link>https://windyboy.github.io/tags/cli/</link>
+      <pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/cli/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>config</title>
+      <link>https://windyboy.github.io/tags/config/</link>
+      <pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/config/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://windyboy.github.io/tags/golang/</link>
+      <pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>urfave-cli</title>
+      <link>https://windyboy.github.io/tags/urfave-cli/</link>
+      <pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate>
+      
+      <guid>https://windyboy.github.io/tags/urfave-cli/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>devops</title>
       <link>https://windyboy.github.io/tags/devops/</link>
@@ -59,42 +95,6 @@
       <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
       
       <guid>https://windyboy.github.io/tags/hugo/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>remark42</title>
-      <link>https://windyboy.github.io/tags/remark42/</link>
-      <pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/remark42/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ca</title>
-      <link>https://windyboy.github.io/tags/ca/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/ca/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>certificate</title>
-      <link>https://windyboy.github.io/tags/certificate/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/certificate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>docker</title>
-      <link>https://windyboy.github.io/tags/docker/</link>
-      <pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate>
-      
-      <guid>https://windyboy.github.io/tags/docker/</guid>
       <description></description>
     </item>
     
