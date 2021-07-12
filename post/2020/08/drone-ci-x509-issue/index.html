@@ -238,7 +238,9 @@ volumes:
       path: /etc/ssl/certs
 </code></pre></div>
 	</section>
-
+	
+		<div id="remark42"></div>
+	
 
 </article>
 
@@ -386,6 +388,26 @@ volumes:
     
 </div>
 <hr />
+
+
+<script>
+  var remark_config = {
+    host: "https://remark.windy.me",
+    site_id: "backyard",
+    url: "https://windyboy.github.io/post/2020/08/drone-ci-x509-issue/",
+    locale: { .Site.Language.Lang }
+  };
+
+  (function(c) {
+    for(var i = 0; i < c.length; i++){
+      var d = document, s = d.createElement('script');
+      s.src = remark_config.host + '/web/' + c[i] +'.js';
+      s.defer = true;
+      (d.head || d.body).appendChild(s);
+    }
+  })(remark_config.components || ['embed']);
+</script>
+
 
 		</footer>
 		
