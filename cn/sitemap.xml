@@ -2,20 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://windyboy.github.io/tags/cli/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
-  </url><url>
-    <loc>https://windyboy.github.io/tags/config/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <loc>https://windyboy.github.io/categories/</loc>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://windyboy.github.io/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://windyboy.github.io/categories/"
+                />
   </url><url>
     <loc>https://windyboy.github.io/tags/golang/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/tags/graphql/</loc>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/tags/hasura/</loc>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/post/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/tags/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -27,14 +40,11 @@
                 href="https://windyboy.github.io/tags/"
                 />
   </url><url>
-    <loc>https://windyboy.github.io/post/2021/06/urfave-cli-read-config-file/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
-  </url><url>
-    <loc>https://windyboy.github.io/tags/urfave-cli/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <loc>https://windyboy.github.io/post/2021/07/write_native_graphql_client_mutation/</loc>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/</loc>
-    <lastmod>2021-06-28T16:59:45+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -46,30 +56,32 @@
                 href="https://windyboy.github.io/"
                 />
   </url><url>
+    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/tags/cli/</loc>
+    <lastmod>2021-07-12T15:22:16+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/tags/config/</loc>
+    <lastmod>2021-07-12T15:22:16+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/post/2021/06/urfave-cli-read-config-file/</loc>
+    <lastmod>2021-07-12T15:22:16+08:00</lastmod>
+  </url><url>
+    <loc>https://windyboy.github.io/tags/urfave-cli/</loc>
+    <lastmod>2021-07-12T15:22:16+08:00</lastmod>
+  </url><url>
     <loc>https://windyboy.github.io/tags/devops/</loc>
-    <lastmod>2020-09-07T14:58:55+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/tags/drone/</loc>
-    <lastmod>2020-09-07T14:58:55+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/post/2020/08/drone-ci-x509-issue/</loc>
-    <lastmod>2020-09-07T14:58:55+08:00</lastmod>
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/tags/x509/</loc>
-    <lastmod>2020-09-07T14:58:55+08:00</lastmod>
-  </url><url>
-    <loc>https://windyboy.github.io/categories/</loc>
-    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://windyboy.github.io/en/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="cn"
-                href="https://windyboy.github.io/categories/"
-                />
+    <lastmod>2021-07-12T15:24:09+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/tags/comments/</loc>
     <lastmod>2020-07-24T16:32:32+08:00</lastmod>
@@ -84,9 +96,6 @@
     <lastmod>2020-07-24T16:32:32+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/post/2020/07/setup-remark42/</loc>
-    <lastmod>2020-07-24T16:32:32+08:00</lastmod>
-  </url><url>
-    <loc>https://windyboy.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2020-07-24T16:32:32+08:00</lastmod>
   </url><url>
     <loc>https://windyboy.github.io/tags/ca/</loc>
