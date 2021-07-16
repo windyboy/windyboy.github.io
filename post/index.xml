@@ -719,23 +719,23 @@ access_log none
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;# vim /etc/apt/sources.list.d/pdns.list
 
-deb [arch=amd64] http://repo.powerdns.com/debian stretch-rec-41 main
+deb [arch=amd64] http://repo.powerdns.com/debian buster-auth-master main
 &lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
 &lt;li&gt;屏蔽debian自带的pdns&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;# vim /etc/apt/preferences.d/pdns 
 Package: pdns-*
 Pin: origin repo.powerdns.com
-Pin-Priority: 800
+Pin-Priority: 600
 &lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
 &lt;li&gt;引入官方的key&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;# curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add - 
+&lt;pre&gt;&lt;code&gt;# curl https://repo.powerdns.com/CBC8B383-pub.asc | sudo apt-key add -
 &lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
 &lt;li&gt;安装服务器软件&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;# apt-get update
-# apt-get install pdns-server
+# apt-get install pdns-server pdns-backend-pgsql
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;&lt;strong&gt;其他的系统可以到 &lt;a href=&#34;https://repo.powerdns.com/&#34;&gt;https://repo.powerdns.com/&lt;/a&gt; 参考响应的安装指引&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;h3 id=&#34;安装数据库&#34;&gt;安装数据库&lt;/h3&gt;
 &lt;ul&gt;
@@ -1065,7 +1065,7 @@ some.host.              86400 IN RRSIG NSEC 13 2 86400 (
 &lt;/ul&gt;
 &lt;h2 id=&#34;vps-推荐&#34;&gt;VPS 推荐&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;[linode 东京] (&lt;a href=&#34;https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66&#34;&gt;https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;[10g.biz] (&lt;a href=&#34;https://10g.biz/aff.php?aff=226&#34;&gt;https://10g.biz/aff.php?aff=226&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;[bandwagonhost 中国优化] (&lt;a href=&#34;https://bandwagonhost.com/aff.php?aff=20451&#34;&gt;https://bandwagonhost.com/aff.php?aff=20451&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;[cubecloud] (&lt;a href=&#34;https://www.cubecloud.net/aff.php?aff=963&#34;&gt;https://www.cubecloud.net/aff.php?aff=963&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
