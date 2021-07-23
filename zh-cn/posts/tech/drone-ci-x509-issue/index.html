@@ -194,14 +194,14 @@ Github
 </code></pre><p>当然也可以使用下面挂载主机证书的方法</p>
 <h3 id=证书不信任>证书不信任</h3>
 <ol>
-<li>首先把登陆drone的用户设置成admin
-在drone server启动的环境变量中设置</li>
+<li>首先把登陆drone的用户设置成admin</li>
 </ol>
+<p>在drone server启动的环境变量中设置</p>
 <pre><code>DRONE_USER_CREATE=username:yourgitloginname,admin:true
 </code></pre><ol start=2>
 <li>把项目设置为信任项目</li>
 </ol>
-<p><img class=img-fluid src=/static/trust.png alt="trust project" loading=lazy>
+<p><img class=img-fluid src=/images/trust.png alt="trust project" loading=lazy>
 </p>
 <ol start=3>
 <li>把主机的证书目录挂载到执行环境中</li>
