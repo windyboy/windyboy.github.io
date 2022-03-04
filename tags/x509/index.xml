@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>x509 on 后花园</title><link>https://windyboy.github.io/tags/x509/</link><description>Recent content in x509 on 后花园</description><generator>Hugo -- gohugo.io</generator><language>cn</language><copyright>© 2016-2022 糖醋小排 版权所有.</copyright><lastBuildDate>Fri, 28 Aug 2020 12:39:12 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/x509/index.xml" rel="self" type="application/rss+xml"/><item><title>Drone CI 解决自签名证书的信任问题</title><link>https://windyboy.github.io/posts/tech/drone-ci-x509-issue/</link><pubDate>Fri, 28 Aug 2020 12:39:12 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/drone-ci-x509-issue/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>自建的系统如果没有使用公网资源，多数都是采用自签名的方式发放证书。最大的问题几乎就是自签名的信任问题，几乎成了自建工作环境最大的痛。大家都以为把主机的证书挂载到runner上就可以解决问题，&lt;strong>然而并不行&lt;/strong>&lt;/p>
+&lt;h2 id="问题">问题&lt;/h2>
+&lt;ol>
+&lt;li>clone 的过程中，证书不信任&lt;/li>
+&lt;li>push docker 镜像， release 发布证书不信任&lt;/li>
+&lt;/ol>
+&lt;h2 id="解决方法">解决方法&lt;/h2>
+&lt;h3 id="clone">clone&lt;/h3>
+&lt;p>如果不是把clone作为一个step，可以直接使用skip_verify: true忽略验证&lt;/p>
+&lt;pre tabindex="0">&lt;code>clone:
+tags: true
+skip_verify: true
+&lt;/code>&lt;/pre>&lt;p>当然也可以使用下面挂载主机证书的方法&lt;/p>
+&lt;h3 id="证书不信任">证书不信任&lt;/h3>
+&lt;ol>
+&lt;li>首先把登陆drone的用户设置成admin&lt;/li>
+&lt;/ol>
+&lt;p>在drone server启动的环境变量中设置&lt;/p>
+&lt;pre tabindex="0">&lt;code>DRONE_USER_CREATE=username:yourgitloginname,admin:true
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>把项目设置为信任项目&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://windyboy.github.io/images/trust.png" alt="trust project">&lt;/p>
+&lt;ol start="3">
+&lt;li>把主机的证书目录挂载到执行环境中&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>- name: release-publish
+image: plugins/docker
+volumes:
+- name: certs
+path: /etc/ssl/certs
+volumes:
+- name: certs
+host:
+path: /etc/ssl/certs
+&lt;/code>&lt;/pre></description></item><item><title>Kind添加私有仓库自签名CA证书</title><link>https://windyboy.github.io/posts/tech/kind-add-self-signed-ca/</link><pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/kind-add-self-signed-ca/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>在开发环境中安装&lt;a href="https://kind.sigs.k8s.io/" title="kind">kind&lt;/a>以后，如果要部署私有仓库中的镜像，需要把自签名的根证书添加到信任列表中。
+否则需要使用&lt;a href="https://kind.sigs.k8s.io/" title="kind">kind&lt;/a> load命令手动从主机把镜像加载到容器当中，不能自动部署，略嫌麻烦。&lt;/p>
+&lt;h2 id="问题">问题&lt;/h2>
+&lt;p>在部署私有镜像仓库中的镜像的时候发生错误：&amp;ldquo;x509: certificate signed by unknown authority&amp;rdquo;&lt;/p>
+&lt;h2 id="解决">解决&lt;/h2>
+&lt;ul>
+&lt;li>查看&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># get container id
+$ docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+8c52432697b6 kindest/node:v1.18.2 &amp;#34;/usr/local/bin/entr…&amp;#34; 3 days ago Up 4 hours 127.0.0.1:39147-&amp;gt;6443/tcp kind-control-plane
+# attach
+$ docker exec -it 8c52432697b6 /bin/bash
+root@kind-control-plane:/# cat /etc/issue
+Ubuntu 19.10 \n \l
+&lt;/code>&lt;/pre>&lt;p>发现是ubuntu 19
+于是问题可以解决，要么把主机中含有自签名ca的信任列表Mount到容器中，要么在容器中添加自签名ca证书即可。&lt;/p>
+&lt;ul>
+&lt;li>添加ca证书&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>root@kind-control-plane:/# mkdir /usr/local/share/ca-certificates/company
+root@kind-control-plane:/# exit
+$ docker cp your-ca.crt 8c52432697b6:/usr/share/etc/ca-certificates/company/
+$ docker exec -it 8c52432697b6 /bin/bash
+root@kind-control-plane:/# update-ca-certificates
+# verify
+root@kind-control-plane:/# curl https://your-private-registry
+&lt;/code>&lt;/pre>&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>How to install certificates for command line &lt;a href="https://askubuntu.com/questions/645818/how-to-install-certificates-for-command-line">https://askubuntu.com/questions/645818/how-to-install-certificates-for-command-line&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

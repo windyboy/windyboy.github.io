@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 后花园</title><link>https://windyboy.github.io/posts/</link><description>Recent content in Posts on 后花园</description><generator>Hugo -- gohugo.io</generator><language>cn</language><copyright>© 2016-2022 糖醋小排 版权所有.</copyright><lastBuildDate>Mon, 12 Jul 2021 11:14:40 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>使用go的graphql本地客户端mutation</title><link>https://windyboy.github.io/posts/tech/write_native_graphql_client_mutation/</link><pubDate>Mon, 12 Jul 2021 11:14:40 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/write_native_graphql_client_mutation/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>&lt;a href="https://github.com/hasura/go-graphql-client" title="hasura-go-client">hasura-go-client&lt;/a> 的文档中关于mutation部分的描述&lt;/p>
+&lt;blockquote>
+&lt;p>For example, to make the following GraphQL mutation:&lt;/p>
+&lt;/blockquote>
+&lt;pre tabindex="0">&lt;code>mutation($ep: Episode!, $review: ReviewInput!) {
+createReview(episode: $ep, review: $review) {
+stars
+commentary
+}
+}
+variables {
+&amp;#34;ep&amp;#34;: &amp;#34;JEDI&amp;#34;,
+&amp;#34;review&amp;#34;: {
+&amp;#34;stars&amp;#34;: 5,
+&amp;#34;commentary&amp;#34;: &amp;#34;This is a great movie!&amp;#34;
+}
+}
+&lt;/code>&lt;/pre>&lt;blockquote>
+&lt;p>You can define:&lt;/p>
+&lt;/blockquote>
+&lt;pre tabindex="0">&lt;code>var m struct {
+CreateReview struct {
+Stars graphql.Int
+Commentary graphql.String
+} `graphql:&amp;#34;createReview(episode: $ep, review: $review)&amp;#34;`
+}
+variables := map[string]interface{}{
+&amp;#34;ep&amp;#34;: starwars.Episode(&amp;#34;JEDI&amp;#34;),
+&amp;#34;review&amp;#34;: starwars.ReviewInput{
+Stars: graphql.Int(5),
+Commentary: graphql.String(&amp;#34;This is a great movie!&amp;#34;),
+},
+}
+&lt;/code>&lt;/pre>&lt;p>当前的版本v0.2.0似乎有出入
+如果模仿这里例子编写代码，并不能得到预期的效果。&lt;/p>
+&lt;p>大致上有两个问题：&lt;/p>
+&lt;ol>
+&lt;li>传入的struct名称应该是一个以input结尾的类型&lt;/li>
+&lt;li>内部的变量必须大写首字母，又必须使用json的说明在转换的时候变成小写&lt;/li>
+&lt;/ol>
+&lt;h2 id="正确的做法">正确的做法&lt;/h2>
+&lt;p>首先在&lt;a href="https://hasura.io">hasura&lt;/a>的服务器上创建数据实体，如果创建的实体名为&amp;quot;data&amp;quot;，&lt;a href="https://hasura.io">hasura&lt;/a>服务器就会生成一些mutation的操作。
+如果是插入一条数据，则需要调用&amp;quot;data_instert_one&amp;quot;的mutation。&lt;/p>
+&lt;p>graphql的对应操作为：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-graphql" data-lang="graphql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">mutation&lt;/span> &lt;span style="color:#75af00">m&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#111">$data&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#75af00">data_insert_input&lt;/span>&lt;span style="color:#111">!)&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">insert_telegram_one&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#111">object&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#111">$data&lt;/span>&lt;span style="color:#111">)&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">id&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;data&amp;#34;&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;text&amp;#34;&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#d88200">&amp;#34;DDDEEDDSS&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这里的例子是插入列名为&amp;quot;text&amp;quot;的数据，返回自动生成的id&lt;/p>
+&lt;p>对应的go程序应该是&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">type&lt;/span> &lt;span style="color:#75af00">data_insert_input&lt;/span> &lt;span style="color:#00a8c8">struct&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">Text&lt;/span> &lt;span style="color:#75af00">graphql&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">String&lt;/span> &lt;span style="color:#d88200">`json:&amp;#34;text&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">client&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#75af00">graphql&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">NewClient&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">url&lt;/span>&lt;span style="color:#111">,&lt;/span> &lt;span style="color:#00a8c8">nil&lt;/span>&lt;span style="color:#111">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00a8c8">var&lt;/span> &lt;span style="color:#75af00">mutation&lt;/span> &lt;span style="color:#00a8c8">struct&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">InsertTelegramOne&lt;/span> &lt;span style="color:#00a8c8">struct&lt;/span> &lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">Id&lt;/span> &lt;span style="color:#75af00">graphql&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">ID&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">}&lt;/span> &lt;span style="color:#d88200">`graphql:&amp;#34;insert_data_one(object: $data)&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">variables&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#00a8c8">map&lt;/span>&lt;span style="color:#111">[&lt;/span>&lt;span style="color:#00a8c8">string&lt;/span>&lt;span style="color:#111">]&lt;/span>&lt;span style="color:#00a8c8">interface&lt;/span>&lt;span style="color:#111">{}{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;data&amp;#34;&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#75af00">data_insert_input&lt;/span>&lt;span style="color:#111">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75af00">Text&lt;/span>&lt;span style="color:#111">:&lt;/span> &lt;span style="color:#75af00">graphql&lt;/span>&lt;span style="color:#111">.&lt;/span>&lt;span style="color:#75af00">String&lt;/span>&lt;span style="color:#111">(&lt;/span>&lt;span style="color:#75af00">text&lt;/span>&lt;span style="color:#111">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这里注意，调用的mutation的名字是&amp;quot;insert_data_one&amp;quot;, 参数固定为&amp;quot;data_insert_input&amp;quot;都是固定的。
+结构内部的变量名必须首字母大小，但必须在json转换的时候注解回小写名称（数据库中列名为小写）
+在variables中定义的名称&amp;quot;data&amp;quot;,则是对应调用中&amp;quot;$data&amp;quot;&lt;/p></description></item><item><title>Urfave Cli 从配置文件读取参数</title><link>https://windyboy.github.io/posts/tech/urfave-cli-read-config-file/</link><pubDate>Mon, 28 Jun 2021 16:59:45 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/urfave-cli-read-config-file/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>&lt;a href="https://github.com/urfave/cli" title="urfavecli">urfavecli&lt;/a> 的使用文档中关于从外部资源文件读取参数的说明比较模糊，从&lt;a href="https://github.com" title="github">github&lt;/a>的issues中也看到用户提到这个问题并提了PR，但现在这个版本依然没有更新，其实只是需要更新一下文档。&lt;/p>
+&lt;h2 id="问题">问题&lt;/h2>
+&lt;blockquote>
+&lt;p>There is a separate package altsrc that adds support for getting flag values from other file input sources.&lt;/p>
+&lt;p>Currently supported input source formats:&lt;/p>
+&lt;p>YAML
+JSON
+TOML&lt;/p>
+&lt;p>In order to get values for a flag from an alternate input source the following code would be added to wrap an existing cli.Flag like below:&lt;/p>
+&lt;p>altsrc.NewIntFlag(&amp;amp;cli.IntFlag{Name: &amp;ldquo;test&amp;rdquo;})&lt;/p>
+&lt;p>Initialization must also occur for these flags. Below is an example initializing getting data from a yaml file below.&lt;/p>
+&lt;p>command.Before = altsrc.InitInputSourceWithContext(command.Flags, NewYamlSourceFromFlagFunc(&amp;ldquo;load&amp;rdquo;))&lt;/p>
+&lt;p>The code above will use the &amp;ldquo;load&amp;rdquo; string as a flag name to get the file name of a yaml file from the cli.Context. It will then use that file name to initialize the yaml input source for any flags that are defined on that command. As a note the &amp;ldquo;load&amp;rdquo; flag used would also have to be defined on the command flags in order for this code snippet to work.&lt;/p>
+&lt;p>Currently only YAML, JSON, and TOML files are supported but developers can add support for other input sources by implementing the altsrc.InputSourceContext for their given sources.&lt;/p>
+&lt;p>Here is a more complete sample of a command using YAML support:&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">package&lt;/span> &lt;span style="color:#111">main&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">import&lt;/span> &lt;span style="color:#f92672">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;os&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;github.com/urfave/cli/v2&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;github.com/urfave/cli/v2/altsrc&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">func&lt;/span> &lt;span style="color:#75af00">main&lt;/span>&lt;span style="color:#f92672">()&lt;/span> &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">flags&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#f92672">[]&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Flag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">NewIntFlag&lt;/span>&lt;span style="color:#f92672">(&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">IntFlag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>&lt;span style="color:#111">Name&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#d88200">&amp;#34;test&amp;#34;&lt;/span>&lt;span style="color:#f92672">}),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">StringFlag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>&lt;span style="color:#111">Name&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#d88200">&amp;#34;load&amp;#34;&lt;/span>&lt;span style="color:#f92672">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">app&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">App&lt;/span>&lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Action&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">func&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">c&lt;/span> &lt;span style="color:#f92672">*&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Context&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#111">error&lt;/span> &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">fmt&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;--test value.*default: 0&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">return&lt;/span> &lt;span style="color:#111">nil&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Before&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">InitInputSourceWithContext&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">flags&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">NewYamlSourceFromFlagFunc&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;load&amp;#34;&lt;/span>&lt;span style="color:#f92672">)),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Flags&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">flags&lt;/span>&lt;span style="color:#f92672">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">app&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Run&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">os&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Args&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这段代码的意思实际做了3件事实现读取配置文件。&lt;/p>
+&lt;ol>
+&lt;li>创建一个load的字符串参数，用于传递文件名的参数&lt;/li>
+&lt;li>创建一个test的整形参数，用于保存从配置文件中读取的内容&lt;/li>
+&lt;li>调用altsrc的读取功能装载&lt;/li>
+&lt;/ol>
+&lt;p>由于原版文档并没有提供运行的方式，以及参数的输出，开始读完不知道发生了什么
+简而言之就是使用一个名字是load的参数，传入文件名，并在文件中读取名为test的参数&lt;/p>
+&lt;h2 id="解决方法">解决方法&lt;/h2>
+&lt;h3 id="加入运行的指令">加入运行的指令&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>go run main.go --load ./app.yml
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>从名为app.yml的文件中读取参数test&lt;/p>
+&lt;p>app.yml:&lt;/p>
+&lt;blockquote>
+&lt;p>test: 123&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="在运行的action中加入参数test的输出">在运行的Action中加入参数test的输出&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">package&lt;/span> &lt;span style="color:#111">main&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75af00">import&lt;/span> &lt;span style="color:#f92672">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;os&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;github.com/urfave/cli/v2&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#d88200">&amp;#34;github.com/urfave/cli/v2/altsrc&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#111">func&lt;/span> &lt;span style="color:#75af00">main&lt;/span>&lt;span style="color:#f92672">()&lt;/span> &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">flags&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#f92672">[]&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Flag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">NewIntFlag&lt;/span>&lt;span style="color:#f92672">(&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">IntFlag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>&lt;span style="color:#111">Name&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#d88200">&amp;#34;test&amp;#34;&lt;/span>&lt;span style="color:#f92672">}),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">StringFlag&lt;/span>&lt;span style="color:#f92672">{&lt;/span>&lt;span style="color:#111">Name&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#d88200">&amp;#34;load&amp;#34;&lt;/span>&lt;span style="color:#f92672">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">app&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">App&lt;/span>&lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Action&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">func&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">c&lt;/span> &lt;span style="color:#f92672">*&lt;/span>&lt;span style="color:#111">cli&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Context&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#111">error&lt;/span> &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">fmt&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Println&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;test: &amp;#34;&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#111">c&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Int&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;test&amp;#34;&lt;/span>&lt;span style="color:#f92672">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#00a8c8">return&lt;/span> &lt;span style="color:#111">nil&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Before&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">InitInputSourceWithContext&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">flags&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#111">altsrc&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">NewYamlSourceFromFlagFunc&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#d88200">&amp;#34;load&amp;#34;&lt;/span>&lt;span style="color:#f92672">)),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">Flags&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#111">flags&lt;/span>&lt;span style="color:#f92672">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#111">app&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Run&lt;/span>&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#111">os&lt;/span>&lt;span style="color:#f92672">.&lt;/span>&lt;span style="color:#75af00">Args&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>原来的：&lt;/p>
+&lt;blockquote>
+&lt;p>fmt.Println(&amp;quot;&amp;ndash;test value.*default: 0&amp;quot;)&lt;/p>
+&lt;/blockquote>
+&lt;p>替换为：&lt;/p>
+&lt;blockquote>
+&lt;p>fmt.Println(&amp;ldquo;test: &amp;ldquo;, c.Int(&amp;ldquo;test&amp;rdquo;))&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="配置文件取值覆盖">配置文件取值覆盖&lt;/h3>
+&lt;p>因为读取配置文件是发生在参数载入之前，所以可以通过在命令行上赋值覆盖在配置文件中的取值&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>go run main.go --test &lt;span style="color:#ae81ff">1&lt;/span> --load ./app.yml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>test: &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="参考资料">参考资料&lt;/h2>
+&lt;ul>
+&lt;li>[urfave/cli] : &lt;a href="https://github.com/urfave/cli">https://github.com/urfave/cli&lt;/a>&lt;/li>
+&lt;li>[issue 800] : &lt;a href="https://github.com/urfave/cli/issues/800">https://github.com/urfave/cli/issues/800&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Drone CI 解决自签名证书的信任问题</title><link>https://windyboy.github.io/posts/tech/drone-ci-x509-issue/</link><pubDate>Fri, 28 Aug 2020 12:39:12 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/drone-ci-x509-issue/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>自建的系统如果没有使用公网资源，多数都是采用自签名的方式发放证书。最大的问题几乎就是自签名的信任问题，几乎成了自建工作环境最大的痛。大家都以为把主机的证书挂载到runner上就可以解决问题，&lt;strong>然而并不行&lt;/strong>&lt;/p>
+&lt;h2 id="问题">问题&lt;/h2>
+&lt;ol>
+&lt;li>clone 的过程中，证书不信任&lt;/li>
+&lt;li>push docker 镜像， release 发布证书不信任&lt;/li>
+&lt;/ol>
+&lt;h2 id="解决方法">解决方法&lt;/h2>
+&lt;h3 id="clone">clone&lt;/h3>
+&lt;p>如果不是把clone作为一个step，可以直接使用skip_verify: true忽略验证&lt;/p>
+&lt;pre tabindex="0">&lt;code>clone:
+tags: true
+skip_verify: true
+&lt;/code>&lt;/pre>&lt;p>当然也可以使用下面挂载主机证书的方法&lt;/p>
+&lt;h3 id="证书不信任">证书不信任&lt;/h3>
+&lt;ol>
+&lt;li>首先把登陆drone的用户设置成admin&lt;/li>
+&lt;/ol>
+&lt;p>在drone server启动的环境变量中设置&lt;/p>
+&lt;pre tabindex="0">&lt;code>DRONE_USER_CREATE=username:yourgitloginname,admin:true
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>把项目设置为信任项目&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://windyboy.github.io/images/trust.png" alt="trust project">&lt;/p>
+&lt;ol start="3">
+&lt;li>把主机的证书目录挂载到执行环境中&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>- name: release-publish
+image: plugins/docker
+volumes:
+- name: certs
+path: /etc/ssl/certs
+volumes:
+- name: certs
+host:
+path: /etc/ssl/certs
+&lt;/code>&lt;/pre></description></item><item><title>使用 Remark42 实现自建用户留言</title><link>https://windyboy.github.io/posts/tech/setup-remark42/</link><pubDate>Fri, 24 Jul 2020 13:56:31 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/setup-remark42/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>原来使用hugo自带的disqus插件实现用户留言，默认情况下感觉要读取的东西太多，于是打算找一个替代产品
+最好是自建服务，装载要比disqus快&lt;/p>
+&lt;h2 id="选择">选择&lt;/h2>
+&lt;p>根据官方的指引&lt;a href="https://gohugo.io/content-management/comments/" title="comments">comments&lt;/a>，其实可以选择的替代品不少&lt;/p>
+&lt;blockquote>
+&lt;h2 id="comments-alternatives">Comments Alternatives&lt;/h2>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>There are a few alternatives to commenting on static sites for those who do not want to use Disqus:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://staticman.net/" title="Staticman">Staticman&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.talkyard.io/blog-comments" title="talkyard">Talkyard&lt;/a> (Open source, &amp;amp; serverless hosting)&lt;/li>
+&lt;li>&lt;a href="https://intensedebate.com/" title="Intense Debate">IntenseDebate&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://graphcomment.com/" title="Graph Comment">Graph Comment&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://muut.com/" title="muut">Muut&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://posativ.org/isso/" title="isso">Isso&lt;/a> (Self-hosted, Python)&lt;/li>
+&lt;li>&lt;a href="https://utteranc.es/" title="Utterances">Utterances&lt;/a> (Open source, GitHub comments widget built on GitHub issues)&lt;/li>
+&lt;li>&lt;a href="https://github.com/umputun/remark42" title="remark42">Remark42&lt;/a> (Open source, Golang, Easy to run docker)&lt;/li>
+&lt;li>&lt;a href="https://commento.io/" title="commento">Commento&lt;/a> (Open Source, available as a service, local install, or docker image)&lt;/li>
+&lt;li>&lt;a href="https://talk.hyvor.com/" title="Hyvor Talk">Hyvor Talk&lt;/a> (Available as a service)&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>有使用github isses作为载体的，但看到网上有人反映数量会爆&lt;/p>
+&lt;p>Isso 倒也是自服的，但python写的，对比&lt;a href="https://github.com/umputun/remark42" title="remark42">remark42&lt;/a>还是会大一些，安装也会麻烦&lt;/p>
+&lt;p>这里选择的&lt;a href="https://github.com/umputun/remark42" title="remark42">remark42&lt;/a>，考虑到本身是&lt;a href="https://golang.org/" title="golang">golang&lt;/a>编写，这样会有比较小的体积以及较好的性能&lt;/p>
+&lt;h2 id="安装">安装&lt;/h2>
+&lt;p>官方的安装指引有使用&lt;a href="https://www.docker.com/" title="docker">docker&lt;/a>和二进制安装两种方案&lt;/p>
+&lt;p>因为我的服务器资源有限，其实docker都是挺重的负担，这里选择直接安装二进制文件，编写服务脚本&lt;/p>
+&lt;p>从release的页面 &lt;a href="https://github.com/umputun/remark42/releases">https://github.com/umputun/remark42/releases&lt;/a> 选择一个稳定的版本，一般就是linux 64位的版本
+&lt;a href="https://github.com/umputun/remark42/releases/download/v1.6.0/remark42.linux-amd64.tar.gz">https://github.com/umputun/remark42/releases/download/v1.6.0/remark42.linux-amd64.tar.gz&lt;/a>&lt;/p>
+&lt;pre tabindex="0">&lt;code> $ wget https://github.com/umputun/remark42/releases/download/v1.6.0/remark42.linux-amd64.tar.gz
+$ tar xzvf remark42.linux-amd64.tar.gz
+$ sudo cp remark42.linux-amd64 /usr/local/bin/remark42
+&lt;/code>&lt;/pre>&lt;p>因为是&lt;a href="https://golang.org/" title="golang">golang&lt;/a>的程序，下载包只有不到8M的体积，而且没有其他依赖，在微型服务器上安装非常舒服&lt;/p>
+&lt;h2 id="配置">配置&lt;/h2>
+&lt;h3 id="创建用户资源">创建用户/资源&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ sudo useradd -r remark42
+$ sudo mkdir -m 770 /var/www/remark42
+$ sudo chown :remark42 /var/www/remark42
+&lt;/code>&lt;/pre>&lt;h3 id="运行参数环境变量">运行参数（环境变量）&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ sudo mkdir /etc/remark42
+$ sudo vim /etc/remark42/remark42.conf
+REMARK_URL=https://myblog.address
+SECRET=some_secret_key_phrase_1234
+SITE=myblog
+AUTH_ANON=true
+EMOJI=true
+&lt;/code>&lt;/pre>&lt;h3 id="systemd-服务脚本">systemd 服务脚本&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ sudo vim /etc/systemd/system/remark42.service
+[Unit]
+Description=remark42 comment engine
+After=network.target
+[Service]
+User=remark42
+Group=remark42
+EnvironmentFile=/etc/remark42/remark42.conf
+WorkingDirectory=/var/www/remark42
+Restart=always
+RestartSec=5
+ExecStart=/usr/local/bin/remark42 server
+[Install]
+WantedBy=multi-user.target
+$ sudo systemctl daemon-reload
+$ sudo systemctl start remark42
+$ sudo systemctl enable remark42
+&lt;/code>&lt;/pre>&lt;h3 id="配置反向代理nginx">配置反向代理(nginx)&lt;/h3>
+&lt;p>最好设置一个独立的子域名，比如 remark.my.blog&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ sudo cat /etc/nginx/sites-available/remark42
+server {
+server_name remark.windy.me;
+listen 443;
+ssl_certificate /etc/letsencrypt/live/remark.my.blog/fullchain.pem; # managed by Certbot
+ssl_certificate_key /etc/letsencrypt/live/remark.my.blog/privkey.pem; # managed by Certbot
+include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+location / {
+proxy_redirect off;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header Host $http_host;
+proxy_pass http://127.0.0.1:8080/;
+}
+}
+&lt;/code>&lt;/pre>&lt;p>&lt;a href="https://github.com/umputun/remark42" title="remark42">remark42&lt;/a>服务启动后，在本地监听8080端口，把nginx代理到服务上&lt;/p>
+&lt;h3 id="oauth用户认证服务">OAuth用户认证服务&lt;/h3>
+&lt;h4 id="google">Google&lt;/h4>
+&lt;ul>
+&lt;li>打开 &lt;a href="https://console.developers.google.com/cloud-resource-manager">https://console.developers.google.com/cloud-resource-manager&lt;/a>&lt;/li>
+&lt;li>创建应用 remark&lt;/li>
+&lt;li>点击左上角下拉菜单，选择 APIs &amp;amp; Services ， 再点击 Credentials&lt;/li>
+&lt;li>在 Authorized JavaScript origins -&amp;gt; URIs 中添加blog的地址和remark服务的地址&lt;/li>
+&lt;li>Authorized redirect URIs -&amp;gt; URIs 中填写回掉地址 &lt;a href="https://remark.my.blog/auth/google/callback">https://remark.my.blog/auth/google/callback&lt;/a>&lt;/li>
+&lt;li>根据页面信息填写配置文件 remark42.conf 中相应的配置信息AUTH_GOOGLE_CID，AUTH_GOOGLE_CSEC&lt;/li>
+&lt;/ul>
+&lt;h4 id="github">Github&lt;/h4>
+&lt;ul>
+&lt;li>打开开发者页面 &lt;a href="https://github.com/settings/developers">https://github.com/settings/developers&lt;/a>&lt;/li>
+&lt;li>填写 Homepage URL &amp;ldquo;&lt;a href="https://remark.my.blog">https://remark.my.blog&lt;/a>&amp;rdquo;&lt;/li>
+&lt;li>填写 Authorization callback URL &amp;ldquo;&lt;a href="https://remark.my.blog/auth/github/callback%22">https://remark.my.blog/auth/github/callback&amp;quot;&lt;/a>&lt;/li>
+&lt;li>根据页面 Client ID, Client Secret 更新配置文件 remark42.conf: AUTH_GITHUB_CID， AUTH_GITHUB_CSEC&lt;/li>
+&lt;/ul>
+&lt;h4 id="twitter">Twitter&lt;/h4>
+&lt;ul>
+&lt;li>打开 &lt;a href="https://developer.twitter.com/en/apps">https://developer.twitter.com/en/apps&lt;/a>&lt;/li>
+&lt;li>创建 App&lt;/li>
+&lt;li>填写 Website URL &amp;ldquo;&lt;a href="https://remark.my.blog">https://remark.my.blog&lt;/a>&amp;rdquo;&lt;/li>
+&lt;li>填写 Callback URL &amp;ldquo;&lt;a href="https://remark.my.blog/auth/twitter/callback%22">https://remark.my.blog/auth/twitter/callback&amp;quot;&lt;/a>&lt;/li>
+&lt;li>点击 Keys and tokens 的tab, 查看 Consumer API keys： API key，API secret key&lt;/li>
+&lt;li>更新配置文件 remark42.conf， 填写 AUTH_TWITTER_CID ，AUTH_TWITTER_CSEC&lt;/li>
+&lt;/ul>
+&lt;h3 id="配置hugo的评论模版">配置hugo的评论模版&lt;/h3>
+&lt;p>打开主题中的模版文件 layouts/partials/comments.html
+添加remark42配置&lt;/p>
+&lt;pre tabindex="0">&lt;code>{{- if .Site.Params.remark42SiteID }}
+&amp;lt;script&amp;gt;
+var remark_config = {
+host: {{ .Site.Params.remark42Url }},
+site_id: {{ .Site.Params.remark42SiteID }},
+components: [&amp;#39;embed&amp;#39;],
+url: {{ .Permalink }},
+locale: {{ .Site.Language.Lang }},
+max_shown_comments: 10,
+theme: &amp;#39;dark&amp;#39;,
+};
+(function(c) {
+for(var i = 0; i &amp;lt; c.length; i++){
+var d = document, s = d.createElement(&amp;#39;script&amp;#39;);
+s.src = remark_config.host + &amp;#39;/web/&amp;#39; +c[i] +&amp;#39;.js&amp;#39;;
+s.defer = true;
+(d.head || d.body).appendChild(s);
+}
+})(remark_config.components || [&amp;#39;embed&amp;#39;]);
+&amp;lt;/script&amp;gt;
+&amp;lt;div id=&amp;#34;remark42&amp;#34; &amp;gt;&amp;lt;/div&amp;gt;
+{{- end }}
+&lt;/code>&lt;/pre>&lt;p>修改hugo配置文件config.toml&lt;/p>
+&lt;pre tabindex="0">&lt;code>[params]
+remark42SiteID = &amp;#34;myblog&amp;#34;
+remark42Url = &amp;#34;https://remark.my.blog&amp;#34;
+comments = true
+&lt;/code>&lt;/pre>&lt;h3 id="配置评论管理员">配置评论管理员&lt;/h3>
+&lt;p>在评论框在底部成功出现以后，使用Oauth服务登陆评论系统，登陆成功以后可以点击评论的nickname，可以看到当前用户编号
+设置用户编号为评论管理员，可以设置多个管理员，用逗号分割&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ sudo vim /etc/remark42/remark42.conf
+ADMIN_SHARED_ID=github_20924f5ace2e27ff9b98801b837b8a495308d782
+&lt;/code>&lt;/pre>&lt;h3 id="配置-telegram-的通知">配置 telegram 的通知&lt;/h3>
+&lt;ul>
+&lt;li>打开 Telegram 应用&lt;/li>
+&lt;li>查询联系人 BotFather&lt;/li>
+&lt;li>和 BotFather 对话，输入 /newbot 创建机器人&lt;/li>
+&lt;li>根据提示信息，还需要创建一个结尾是 _bot的机器人&lt;/li>
+&lt;li>根据 HTTP API的token信息填写 remark42.conf 中 NOTIFY_TELEGRAM_TOKEN&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo vim /etc/remark42/remark42.conf
+NOTIFY_TYPE=telegram
+NOTIFY_TELEGRAM_TOKEN=12345678:xy778Iltzsdr45tg
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>使用Telegram的应用，创建一个私有的Channel， 并把新创建的机器人加为Channel管理员&lt;/li>
+&lt;li>使用getUpdates的api获取channel的id
+&lt;ul>
+&lt;li>访问API，https://api.telegram.org/botXXX:YYYY/getUpdates&lt;/li>
+&lt;li>其中 XXX:YYYY 是前面生成的token 12345678:xy778Iltzsdr45tg&lt;/li>
+&lt;li>如果能正确返回json，检查chat.id就是需要查询的id&lt;/li>
+&lt;li>直接把id填写入NOTIFY_TELEGRAM_CHAN&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo vim /etc/remark42/remark42.conf
+NOTIFY_TELEGRAM_CHAN=1055587116
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;/ul>
+&lt;p>全部配置完后，重启remark42的服务&lt;/p>
+&lt;pre tabindex="0">&lt;code>sudo systemctl restart remark42
+&lt;/code>&lt;/pre>&lt;h2 id="参考资料">参考资料&lt;/h2>
+&lt;ul>
+&lt;li>[hugo comments] &lt;a href="https://gohugo.io/content-management/comments/">https://gohugo.io/content-management/comments/&lt;/a>&lt;/li>
+&lt;li>[remark42 official doc] &lt;a href="https://github.com/umputun/remark42">https://github.com/umputun/remark42&lt;/a>&lt;/li>
+&lt;li>[hugo comments with remark42] &lt;a href="https://blog.lasall.dev/post/hugo-and-comments-with-remark42/">https://blog.lasall.dev/post/hugo-and-comments-with-remark42/&lt;/a>&lt;/li>
+&lt;li>[get telegram channel id] &lt;a href="https://www.reddit.com/r/Telegram/comments/8hpnje/q_how_to_get_channel_id_or_channelusername/">https://www.reddit.com/r/Telegram/comments/8hpnje/q_how_to_get_channel_id_or_channelusername/&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Kind添加私有仓库自签名CA证书</title><link>https://windyboy.github.io/posts/tech/kind-add-self-signed-ca/</link><pubDate>Mon, 20 Jul 2020 10:20:16 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/kind-add-self-signed-ca/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>在开发环境中安装&lt;a href="https://kind.sigs.k8s.io/" title="kind">kind&lt;/a>以后，如果要部署私有仓库中的镜像，需要把自签名的根证书添加到信任列表中。
+否则需要使用&lt;a href="https://kind.sigs.k8s.io/" title="kind">kind&lt;/a> load命令手动从主机把镜像加载到容器当中，不能自动部署，略嫌麻烦。&lt;/p>
+&lt;h2 id="问题">问题&lt;/h2>
+&lt;p>在部署私有镜像仓库中的镜像的时候发生错误：&amp;ldquo;x509: certificate signed by unknown authority&amp;rdquo;&lt;/p>
+&lt;h2 id="解决">解决&lt;/h2>
+&lt;ul>
+&lt;li>查看&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># get container id
+$ docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+8c52432697b6 kindest/node:v1.18.2 &amp;#34;/usr/local/bin/entr…&amp;#34; 3 days ago Up 4 hours 127.0.0.1:39147-&amp;gt;6443/tcp kind-control-plane
+# attach
+$ docker exec -it 8c52432697b6 /bin/bash
+root@kind-control-plane:/# cat /etc/issue
+Ubuntu 19.10 \n \l
+&lt;/code>&lt;/pre>&lt;p>发现是ubuntu 19
+于是问题可以解决，要么把主机中含有自签名ca的信任列表Mount到容器中，要么在容器中添加自签名ca证书即可。&lt;/p>
+&lt;ul>
+&lt;li>添加ca证书&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>root@kind-control-plane:/# mkdir /usr/local/share/ca-certificates/company
+root@kind-control-plane:/# exit
+$ docker cp your-ca.crt 8c52432697b6:/usr/share/etc/ca-certificates/company/
+$ docker exec -it 8c52432697b6 /bin/bash
+root@kind-control-plane:/# update-ca-certificates
+# verify
+root@kind-control-plane:/# curl https://your-private-registry
+&lt;/code>&lt;/pre>&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>How to install certificates for command line &lt;a href="https://askubuntu.com/questions/645818/how-to-install-certificates-for-command-line">https://askubuntu.com/questions/645818/how-to-install-certificates-for-command-line&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>nghttpx搭配squid科学浏览（更新debian）</title><link>https://windyboy.github.io/posts/tech/proxy-with-nghttpx-squid/</link><pubDate>Fri, 17 Jul 2020 15:13:14 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/proxy-with-nghttpx-squid/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>使用通用的https代理访问互联网&lt;/p>
+&lt;p>受限制网络 ==&amp;gt; http proxy ==&amp;gt; nghttpx server ==&amp;gt; squid ==&amp;gt; 互联网&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>服务器&lt;/p>
+&lt;p>服务器上部署代理工具 &lt;a href="https://nghttp2.org" title="nghttp2">nghttp2&lt;/a>（nghttpx server） ，缓存服务&lt;a href="http://www.squid-cache.org" title="squid">squid&lt;/a>
+安装&lt;a href="https://letsencrypt.org" title="letsencrypt">letsencrypt&lt;/a>证书&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>客户端&lt;/p>
+&lt;p>客户端可以不安装特别软件，直接设置proxy就可以，在服务端如果开启客户端认证，需要在客户端安装客户证书&lt;/p>
+&lt;p>https proxy client ==&amp;gt; https 服务&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>主要工具&lt;/p>
+&lt;ul>
+&lt;li>https proxy 服务器 &lt;a href="https://nghttp2.org" title="nghttp2">nghttp2&lt;/a>&lt;/li>
+&lt;li>certbot 安装&lt;a href="https://letsencrypt.org" title="letsencrypt">letsencrypt&lt;/a>证书&lt;/li>
+&lt;li>缓存服务器 &lt;a href="http://www.squid-cache.org" title="squid">squid&lt;/a>&lt;/li>
+&lt;li>客户端证书生成工具 &lt;a href="https://github.com/OpenVPN/easy-rsa" title="easyrsa">easyrsa&lt;/a>&lt;/li>
+&lt;li>客户端证书导入导出 &lt;a href="https://www.openssl.org" title="openssl">openssl&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="centos-7">centos 7&lt;/h3>
+&lt;pre tabindex="0">&lt;code>#cat /etc/redhat-release
+CentOS Linux release 7.2.1511 (Core)
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>基础软件(编译)&lt;/li>
+&lt;/ul>
+&lt;p>如果使用epel的源安装，首先安装epel&lt;/p>
+&lt;pre tabindex="0">&lt;code># yum install epel-release
+# yum install openssl git-core
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;a href="https://nghttp2.org" title="nghttp2">nghttp2&lt;/a> &lt;a href="http://www.squid-cache.org" title="squid">squid&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>使用的代理程序是nghttpx, 安装的软件包是nghttp2，nghttp2中包含nghttpx的代理服务程序&lt;/p>
+&lt;pre tabindex="0">&lt;code># yum install nghttp2 squid
+&lt;/code>&lt;/pre>&lt;p>nghttp2 也可以自编译源码来安装，epel安装的版本是1.7,通过编译可以安装1.9&lt;/p>
+&lt;blockquote>
+&lt;pre tabindex="0">&lt;code>sudo yum groupinstall &amp;#34;Development Tools&amp;#34;
+sudo yum install libev libev-devel zlib zlib-devel openssl openssl-devel git
+git clone https://github.com/nghttp2/nghttp2.git
+cd nghttp2
+autoreconf -i
+automake
+autoconf
+./configure
+make
+sudo make install
+&lt;/code>&lt;/pre>&lt;/blockquote>
+&lt;p>默认安装位置是 &lt;code>/usr/local/bin&lt;/code>&lt;/p>
+&lt;p>&lt;em>&lt;strong>在centos 7的环境正不能使用最新版的1.11.0-DEV，需要使用1.9.x的版本。在clone项目以后需要checkout 1.9.x的版本&lt;/strong>&lt;/em>&lt;/p>
+&lt;p>&lt;code>git checkout v1.9.x&lt;/code>&lt;/p>
+&lt;p>然后再执行编译的操作,编译安装完成以后，检查一下版本&lt;/p>
+&lt;p>&lt;code># /usr/local/bin/nghttpx -v&lt;/code>&lt;/p>
+&lt;h3 id="debian-10-ubuntu">debian 10 （ubuntu）&lt;/h3>
+&lt;pre tabindex="0">&lt;code># lsb_release -a
+No LSB modules are available.
+Distributor ID: Debian
+Description: Debian GNU/Linux 10 (buster)
+Release: 10
+Codename: buster
+&lt;/code>&lt;/pre>&lt;pre tabindex="0">&lt;code>sudo apt install nghttp2
+sudo apt install python-certbot-apache -t buster-backports
+&lt;/code>&lt;/pre>&lt;p>安装&lt;a href="https://certbot.eff.org" title="certbot">certbot&lt;/a>会附带安装一个apache的服务器，需要注意，如果有web的服务，需要禁止掉，申请证书的时候可以临时启动一个
+编译（略）&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/OpenVPN/easy-rsa" title="easyrsa">easyrsa&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>克隆easyrsa源码&lt;/p>
+&lt;pre tabindex="0">&lt;code># git clone https://github.com/OpenVPN/easy-rsa.git
+&lt;/code>&lt;/pre>&lt;p>把easyrsa 复制到/opt/中完成安装&lt;/p>
+&lt;pre tabindex="0">&lt;code># cd easy-rsa/
+# cp -r easyrsa3 /opt/
+&lt;/code>&lt;/pre>&lt;h2 id="配置">配置&lt;/h2>
+&lt;h3 id="证书">证书&lt;/h3>
+&lt;ul>
+&lt;li>https 证书&lt;/li>
+&lt;/ul>
+&lt;p>服务器端证书可以使用&lt;a href="https://letsencrypt.org" title="letsencrypt">letsencrypt&lt;/a>提供的免费证书。&lt;/p>
+&lt;p>&lt;del>配置&lt;a href="https://letsencrypt.org" title="letsencrypt">letsencrypt&lt;/a>证书的时候可以使用&lt;a href="https://github.com/lukas2511/letsencrypt.sh">letsencrypt.sh&lt;/a>的脚本,可以简化配置的过程。&lt;/del>&lt;/p>
+&lt;p>使用&lt;a href="https://certbot.eff.org" title="certbot">certbot&lt;/a>配置&lt;/p>
+&lt;pre tabindex="0">&lt;code>sudo certbot certonly -d your.domain
+How would you like to authenticate with the ACME CA?
+1: Apache Web Server plugin (apache)
+2: Nginx Web Server plugin (nginx)
+3: Spin up a temporary webserver (standalone)
+4: Place files in webroot directory (webroot)
+&lt;/code>&lt;/pre>&lt;p>申请证书的时候需要在80端口开启一个web服务，如果使用之前安装的apache可以选1，同样也可以选择nginx，如果没有web服务，也可以选3，临时启动一个服务&lt;/p>
+&lt;ul>
+&lt;li>客户端验证证书&lt;/li>
+&lt;/ul>
+&lt;p>自己做一个ca，自行签发客户端证书，使用easyrsa 配置客户端证书&lt;/p>
+&lt;pre tabindex="0">&lt;code># cd /opt/easyrsa3
+# mv vars.example vars
+&lt;/code>&lt;/pre>&lt;p>编辑vars文件，去掉前面的注释，编辑中主要的变量&lt;/p>
+&lt;pre tabindex="0">&lt;code>set_var EASYRSA_REQ_COUNTRY &amp;#34;US&amp;#34;
+set_var EASYRSA_REQ_PROVINCE &amp;#34;California&amp;#34;
+set_var EASYRSA_REQ_CITY &amp;#34;San Francisco&amp;#34;
+set_var EASYRSA_REQ_ORG &amp;#34;Copyleft Certificate Co&amp;#34;
+set_var EASYRSA_REQ_EMAIL &amp;#34;me@example.net&amp;#34;
+set_var EASYRSA_REQ_OU &amp;#34;My Organizational Unit&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>生成客户端证书&lt;/p>
+&lt;pre tabindex="0">&lt;code># ./easyrsa init-pki
+# ./easyrsa build-ca nopass
+# ./easyrsa gen-dh
+# ./easyrsa build-client-full client-me nopass
+&lt;/code>&lt;/pre>&lt;p>导出CA证书&lt;/p>
+&lt;pre tabindex="0">&lt;code># openssl x509 -in pki/ca.crt -out ca.pem -outform PEM
+&lt;/code>&lt;/pre>&lt;p>导出客户端证书&lt;/p>
+&lt;pre tabindex="0">&lt;code># openssl pkcs12 -export -clcerts -in pki/issued/client-me.crt -inkey pki/private/client-me.key -out client-me.p12
+# openssl pkcs12 -in client-me.p12 -out client-me.pem -clcerts
+&lt;/code>&lt;/pre>&lt;p>客户端电脑导入ca和客户端证书&lt;/p>
+&lt;p>最终生成ca.pem, client-me.pem两个证书文件，复制到客户端，并导入。
+ca.pem导入为可信任的证书颁发机构，client-me.pem导入为信任证书。&lt;/p>
+&lt;h3 id="代理">代理&lt;/h3>
+&lt;ul>
+&lt;li>创建nghttpx的配置文件&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo mkdir /etc/nghttpx
+$ sudo touch /etc/nghttpx/nghttpx.conf
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>编辑配置文件 nghttpx.conf&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>frontend=0.0.0.0,443;tls
+backend=127.0.0.1,3128;no-tls
+#服务器证书
+private-key-file=/etc/letsencrypt/live/[domain]/privkey.pem
+certificate-file=/etc/letsencrypt/live/[domain]/fullchain.pem
+#客户端验证
+dh-param-file=/etc/nghttpx/dh.pem
+verify-client-cacert=/etc/nghttpx/ca.pem
+#代理
+http2-proxy=yes
+no-via=yes
+no-ocsp=yes
+no-host-rewrite=yes
+add-x-forwarded-for=yes
+strip-incoming-x-forwarded-for=yes
+&lt;/code>&lt;/pre>&lt;p>其中[domain]为服务器的域名，privkey.pem, fullchain.pem是letsencrypt生成的服务器证书。dh.pem, ca.pem是客户端证书&lt;/p>
+&lt;ul>
+&lt;li>ngttpx服务&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo vi /etc/systemd/system/nghttpx.service
+&lt;/code>&lt;/pre>&lt;p>编辑内容&lt;/p>
+&lt;pre tabindex="0">&lt;code>[Unit]
+Description=nghttpx
+After=network.target
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/nghttpx --conf=/etc/nghttpx/nghttpx.conf
+ExecReload=/bin/kill -SIGUSR1 ${MAINPID}
+ExecStop=/bin/kill -SIGQUIT ${MAINPID}
+[Install]
+WantedBy=multi-user.target
+&lt;/code>&lt;/pre>&lt;p>服务&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ sudo systemctl daemon-reload
+$ sudo systemctl start nghttpx
+$ sudo systemctl enable nghttpx
+&lt;/code>&lt;/pre>&lt;h3 id="缓存">缓存&lt;/h3>
+&lt;p>通过yum安装的squid服务，默认配置基本上已经满足要求，需要做一点小修改&lt;/p>
+&lt;ul>
+&lt;li>编辑配置&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo vi /etc/squid/squid.conf
+&lt;/code>&lt;/pre>&lt;p>在配置文件尾部加上&lt;/p>
+&lt;pre tabindex="0">&lt;code>via off
+forwarded_for delete
+access_log none
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>重启服务&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo systemctl restart squid
+&lt;/code>&lt;/pre>&lt;h2 id="参考资料">参考资料&lt;/h2>
+&lt;ul>
+&lt;li>nghttpx 官方指引 &lt;a href="https://nghttp2.org/documentation/nghttpx-howto.html">https://nghttp2.org/documentation/nghttpx-howto.html&lt;/a>&lt;/li>
+&lt;li>谷歌上另外一篇参考的nghttpx+squid &lt;a href="https://wzyboy.im/post/1052.html">https://wzyboy.im/post/1052.html&lt;/a>&lt;/li>
+&lt;li>nghttpx 的配置，证书，服务脚本 &lt;a href="https://blog.apar.jp/linux/2584/">https://blog.apar.jp/linux/2584/&lt;/a>&lt;/li>
+&lt;li>centos 编译 nghttp2 &lt;a href="https://gist.github.com/sonots/2bdf6cd26c23ef44db71">https://gist.github.com/sonots/2bdf6cd26c23ef44db71&lt;/a>&lt;/li>
+&lt;li>certbot on debian 10 &lt;a href="https://www.tecmint.com/setup-free-ssl-certificate-for-apache-on-debian-10/">https://www.tecmint.com/setup-free-ssl-certificate-for-apache-on-debian-10/&lt;/a>&lt;/li>
+&lt;li>免费证书提供 &lt;a href="https://letsencrypt.org/">https://letsencrypt.org/&lt;/a>&lt;/li>
+&lt;li>client 证书生成 &lt;a href="https://gist.github.com/mtigas/952344">https://gist.github.com/mtigas/952344&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="vps引用">VPS引用&lt;/h2>
+&lt;ul>
+&lt;li>[linode 东京] (&lt;a href="https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66">https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66&lt;/a>)&lt;/li>
+&lt;li>[bandwagonhost 中国优化] (&lt;a href="https://bandwagonhost.com/aff.php?aff=20451">https://bandwagonhost.com/aff.php?aff=20451&lt;/a>)&lt;/li>
+&lt;li>[cubenet] (&lt;a href="https://www.cubecloud.net/aff.php?aff=963">https://www.cubecloud.net/aff.php?aff=963&lt;/a>)&lt;/li>
+&lt;/ul></description></item><item><title>使用powerdns搭建自己安全的域名解析服务</title><link>https://windyboy.github.io/posts/tech/setup-powerdns-authoritative-with-dnssec/</link><pubDate>Thu, 14 Feb 2019 10:00:00 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/setup-powerdns-authoritative-with-dnssec/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;ul>
+&lt;li>解析服务需要提供两个独立的IP，一主(master)一从(slave)提供解析服务&lt;/li>
+&lt;li>两个NS服务器IP地址要注册到域名注册商的服务里，解决先有鸡还是先有蛋的问题&lt;/li>
+&lt;li>DNSSEC的key也要注册到注册商&lt;/li>
+&lt;li>安装 &lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a> 管理域名&lt;/li>
+&lt;/ul>
+&lt;h2 id="安装软件">安装软件&lt;/h2>
+&lt;p>&lt;strong>两台服务器都安装相同的软件, authoritative 和 database&lt;/strong>&lt;/p>
+&lt;h3 id="从官方的repohttpsrepopowerdnscom安装authoritative服务软件">从官方的&lt;a href="https://repo.powerdns.com/">repo&lt;/a>安装authoritative服务软件&lt;/h3>
+&lt;ul>
+&lt;li>创建pdns的源&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># vim /etc/apt/sources.list.d/pdns.list
+deb [arch=amd64] http://repo.powerdns.com/debian buster-auth-master main
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>屏蔽debian自带的pdns&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># vim /etc/apt/preferences.d/pdns
+Package: pdns-*
+Pin: origin repo.powerdns.com
+Pin-Priority: 600
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>引入官方的key&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># curl https://repo.powerdns.com/CBC8B383-pub.asc | sudo apt-key add -
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>安装服务器软件&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># apt-get update
+# apt-get install pdns-server pdns-backend-pgsql
+&lt;/code>&lt;/pre>&lt;p>&lt;em>&lt;strong>其他的系统可以到 &lt;a href="https://repo.powerdns.com/">https://repo.powerdns.com/&lt;/a> 参考响应的安装指引&lt;/strong>&lt;/em>&lt;/p>
+&lt;h3 id="安装数据库">安装数据库&lt;/h3>
+&lt;ul>
+&lt;li>安装postgresql&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># apt install postgresql postgresql-client
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>初始化数据库账号&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># sudo -u postgres psql
+postgres=# create user pdns with password &amp;#39;mypdnspassword&amp;#39;;
+postgres=# create database pdns owner pdns;
+postgres=# grant all privileges on database pdns to pdns;
+postgres=# \q
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>安装powerdns的backend, 创建数据库&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># apt install pdns-backend-pgsql
+# psql -U pdns -d pdns -h 127.0.0.1 -p 5432
+pdns=&amp;gt; \i /usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>建立主从数据的复制&lt;/li>
+&lt;/ul>
+&lt;p>在从(Slave)服务器上执行&lt;/p>
+&lt;pre tabindex="0">&lt;code># psql -U pdns -d pdns -h 127.0.0.1 -p 5432
+pdns=&amp;gt; insert into supermasters (ip, nameserver, account) values (&amp;#39;x.x.x.x1&amp;#39;, &amp;#39;ns2.some.host&amp;#39;,&amp;#39;admin&amp;#39;);
+pdns=&amp;gt; insert into domains (name, master, type) values (&amp;#39;some.host&amp;#39;, &amp;#39;x.x.x.x1&amp;#39;, &amp;#39;SLAVE&amp;#39;);
+pdns=&amp;gt;\q
+# systemctl restart pdns
+&lt;/code>&lt;/pre>&lt;p>x.x.x.x1 是主服务器的IP地址&lt;/p>
+&lt;h3 id="安装-powerdns-admin">安装 &lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">Powerdns-Admin&lt;/a>&lt;/h3>
+&lt;p>&lt;strong>管理界面只安装在主服务器上&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>安装基础设施&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># apt install -y libmysqlclient-dev libsasl2-dev libldap2-dev libssl-dev libxml2-dev libxslt1-dev libxmlsec1-dev libffi-dev pkg-config apt-transport-https virtualenv build-essential
+# curl -sL https://deb.nodesource.com/setup_10.x | bash -
+# apt-get install -y nodejs
+# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+# echo &amp;#34;deb https://dl.yarnpkg.com/debian/ stable main&amp;#34; | tee /etc/apt/sources.list.d/yarn.list
+# apt update -y
+# apt install -y yarn
+# apt install nginx
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>创建数据库&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ sudo su - postgres
+$ createuser powerdnsadmin
+$ createdb powerdnsadmindb
+$ psql
+postgres=# alter user powerdnsadmin with encrypted password &amp;#39;powerdnsadmin&amp;#39;;
+postgres=# grant all privileges on database powerdnsadmindb to powerdnsadmin;
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>安装软件&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># git clone https://github.com/ngoduykhanh/PowerDNS-Admin.git /opt/web/powerdns-admin
+# cd /opt/web/powerdns-admin
+# virtualenv -p python3 flask
+# source ./flask/bin/activate
+# pip install -r requirements.txt
+# pip install psycopg2
+# cp config_template.py config.py
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>数据库配置&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># vi config.py
+SQLALCHEMY_DATABASE_URI = &amp;#39;postgresql://powerdnsadmin:powerdnsadmin@127.0.0.1/powerdnsadmindb&amp;#39;
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>运行&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># export FLASK_APP=app/__init__.py
+# flask db upgrade
+# yarn install --pure-lockfile
+# flask assets build
+# ./run.py
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>安装服务&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># groupadd powerdnsadmin
+# useradd --system --user-group powerdnsadmin
+# vim /etc/systemd/system/powerdns-admin.service
+[Unit]
+Description=PowerDNS-Admin
+After=network.target
+[Service]
+Type=simple
+User=powerdnsadmin
+Group=powerdnsadmin
+ExecStart=/opt/web/powerdns-admin/flask/bin/gunicorn --workers 2 --bind unix:/opt/web/powerdns-admin/powerdns-admin.sock app:app
+WorkingDirectory=/opt/web/powerdns-admin
+Restart=always
+[Install]
+WantedBy=multi-user.target
+# systemctl daemon-reload
+# systemctl start powerdns-admin
+# systemctl enable powerdns-admin
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>配置反向代理&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># vim /etc/nginx/sites-available/pdns
+server {
+server_name pdns.some.local ;
+listen 80;
+index index.html index.htm index.php;
+root /opt/web/powerdns-admin;
+access_log /var/log/nginx/powerdns-admin.local.access.log combined;
+error_log /var/log/nginx/powerdns-admin.local.error.log;
+client_max_body_size 10m;
+client_body_buffer_size 128k;
+proxy_redirect off;
+proxy_connect_timeout 90;
+proxy_send_timeout 90;
+proxy_read_timeout 90;
+proxy_buffers 32 4k;
+proxy_buffer_size 8k;
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_headers_hash_bucket_size 64;
+location ~ ^/static/ {
+include /etc/nginx/mime.types;
+root /opt/web/powerdns-admin/app;
+location ~* \.(jpg|jpeg|png|gif)$ {
+expires 365d;
+}
+location ~* ^.+.(css|js)$ {
+expires 7d;
+}
+}
+location / {
+proxy_pass http://unix:/opt/web/powerdns-admin/powerdns-admin.sock;
+proxy_read_timeout 120;
+proxy_connect_timeout 120;
+proxy_redirect off;
+}
+}
+# ln -s /etc/nginx/sites-available/pdns /etc/nginx/sites-enabled/pdns
+# nginx -t
+# systemctl restart nginx
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>连接到PowerDNS API&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>打开网页 pdns.some.host ， 注册新用户并登陆
+打开 API 设置页面，连接到主服务器
+http://pdns.some.host/admin/setting/pdns
+PDNS API URL: http://localhost:8081
+PDNS API KEY: somekey
+&lt;/code>&lt;/pre>&lt;h2 id="配置服务">配置服务&lt;/h2>
+&lt;h3 id="配置环境">配置环境&lt;/h3>
+&lt;ul>
+&lt;li>配置host文件，强制解析 ns1, ns2&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># vim /etc/hosts
+x.x.x.x1 ns1.some.host
+x.x.x.x2 ns2.some.host
+&lt;/code>&lt;/pre>&lt;p>两台解析服务器都使用相同配置&lt;/p>
+&lt;ul>
+&lt;li>分别在两台主机验证&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># ping ns1.some.host
+# ping ns2.some.host
+&lt;/code>&lt;/pre>&lt;h3 id="master-ns1somehost">Master ns1.some.host&lt;/h3>
+&lt;pre tabindex="0">&lt;code># vim /etc/powerdns/pdns.conf
+config-dir=/etc/powerdns
+setuid=pdns
+setgid=pdns
+master=yes
+slave=no
+allow-axfr-ips=x.x.x.x2/32
+default-soa-name=ns1.some.host
+dnsupdate=yes
+daemon=yes
+disable-axfr=no
+guardian=yes
+local-address=0.0.0.0
+local-port=53
+log-dns-details=no
+log-dns-queries=no
+loglevel=9
+socket-dir=/var/run
+version-string=powerdns
+# only 4.0
+webserver=yes
+api=yes
+api-key=somekey
+include-dir=/etc/powerdns/pdns.d
+launch=
+&lt;/code>&lt;/pre>&lt;p>其中x.x.x.x2为从服务器ns2.some.host的ip地址&lt;/p>
+&lt;h3 id="slave-ns2somehost">Slave ns2.some.host&lt;/h3>
+&lt;pre tabindex="0">&lt;code># vim /etc/powerdns/pdns.conf
+config-dir=/etc/powerdns
+setuid=pdns
+setgid=pdns
+master=no
+slave=yes
+daemon=yes
+disable-axfr=yes
+guardian=yes
+local-address=0.0.0.0
+local-port=53
+log-dns-details=no
+log-dns-queries=no
+loglevel=9
+slave-cycle-interval=60
+socket-dir=/var/run
+version-string=powerdns
+include-dir=/etc/powerdns/pdns.d
+launch=
+&lt;/code>&lt;/pre>&lt;h3 id="使用powerdns-admin界面创建域名">使用&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a>界面创建域名&lt;/h3>
+&lt;p>登录到&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a>的网页， 选择New Domain，进入新建向导的网页, 在 name 里输入域名 some.host, type 设置为 master, SOA-EDIT-API 默认 DEFAULT&lt;/p>
+&lt;p>点击Dashboard 回到主界面, 从列表中选择刚才创建的域名 some.host&lt;/p>
+&lt;pre tabindex="0">&lt;code>some.host SOA ns1.some.host hostmaster.some.host 2017101100 28800 7200 604800 86400
+&lt;/code>&lt;/pre>&lt;p>第一条ns1.some.host为主服务器域名&lt;/p>
+&lt;p>第二条hostmaster.some.host实际上是邮件地址，系统替换第一个&amp;rsquo;.&amp;lsquo;为&amp;rsquo;@&amp;rsquo;, 这里代表的地址是hostmaster@some.host，具体可以根据实际情况写自己的邮箱地址&lt;/p>
+&lt;p>创建成功以后可以用dig命令核实一下&lt;/p>
+&lt;pre tabindex="0">&lt;code>dig some.host soa @localhost
+;; ANSWER SECTION:
+some.host. 3600 IN SOA ns1.some.host. postmaster.some.host. 2017101106 28800 7200 604800 86400
+&lt;/code>&lt;/pre>&lt;h3 id="创建dnssec记录">创建DNSSEC记录&lt;/h3>
+&lt;ul>
+&lt;li>使用pdnsutil创建DNSSEC&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>pdnsutil secure-zone some.host
+Securing zone with default key size
+Adding CSK (257) with algorithm ecdsa256
+Zone some.host secured
+gpgsql Connection successful. Connected to database &amp;#39;pdns&amp;#39; on &amp;#39;localhost&amp;#39;.
+Adding NSEC ordering information
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>查看已经生成的key&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>pdnsutil show-zone some.host
+This is a Master zone
+Last SOA serial number we notified: 2017101100 == 2017101100 (serial in the database)
+Metadata items: None
+Zone has NSEC semantics
+keys:
+ID = 10 (CSK), flags = 257, tag = 59581, algo = 13, bits = 256 Active ( ECDSAP256SHA256 )
+CSK DNSKEY = some.host. IN DNSKEY 257 3 13 PQ29wza3majnpUQ+21oEkQjfpyN3dMnTy0StcnNX7YeuRRkOeddqPpFMDoeovZcpQGV0BxduvFn/Q2DW5WXp8w== ; ( ECDSAP256SHA256 )
+DS = some.host. IN DS 59581 13 1 7908b7585027f7a262d664c7ee07ae5c5733d44e ; ( SHA1 digest )
+DS = some.host. IN DS 59581 13 2 cfc9006e02d2a02448cd8cdde7fcb8e840703883b166685f37db5225ad902a88 ; ( SHA256 digest )
+DS = some.host. IN DS 59581 13 3 67099daf0ecaf3e99c1c5dcce132c66dc201d27d2f1baade0fecbbbaa2c6b423 ; ( GOST R 34.11-94 digest )
+DS = some.host. IN DS 59581 13 4 53062fef193fae2564f9f2441cb821ae3b55c92afac5790ae70cb8e9359313e0a4c879a09c44c9cb98ed68100cf2e938 ; ( SHA-384 digest )
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>在主服务器创建 TSIG Key&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># pdnsutil generate-tsig-key mykey hmac-sha512
+# pdnsutil activate-tsig-key some.host mykey
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>把相关信息推送到从服务器&lt;/li>
+&lt;/ul>
+&lt;p>在主服务器上执行&lt;/p>
+&lt;pre tabindex="0">&lt;code># pdnsutil increase-serial some.host
+# pdns_control notify some.host
+&lt;/code>&lt;/pre>&lt;p>检查从服务器的日志，看到&lt;/p>
+&lt;pre tabindex="0">&lt;code>Received NOTIFY for some.host
+...
+AXFR done for &amp;#39;some.host&amp;#39;
+&lt;/code>&lt;/pre>&lt;h2 id="注册解析服务">注册解析服务&lt;/h2>
+&lt;ul>
+&lt;li>注册nameserver的IP地址&lt;/li>
+&lt;/ul>
+&lt;p>打开域名注册商的网页，我这里以&lt;a href="https://www.namesilo.com" title="namesilo">namesilo&lt;/a>为例&lt;/p>
+&lt;p>点击domain manager, 再点击已经注册成功的域名(some.host)，进入域名管理界面&lt;/p>
+&lt;p>在NameServers部分，点击View/Manage Registered NameServers， 进入注册域名解析服务器页面&lt;/p>
+&lt;p>点击 REGISTER NEW NAMESERVER 按钮，分别加入ns1, ns2的IP地址&lt;/p>
+&lt;ul>
+&lt;li>注册DNSSEC&lt;/li>
+&lt;/ul>
+&lt;p>回到之前域名管理的页面， 点击DS Records (DNSSEC):后面的Update连接&lt;/p>
+&lt;p>进入注册Key的界面， 相关信息在之前 pdnsutil show-zone some.host 的部分已经列出&lt;/p>
+&lt;pre tabindex="0">&lt;code>DS = some.host. IN DS 59581 13 1 7908b7585027f7a262d664c7ee07ae5c5733d44e ; ( SHA1 digest )
+&lt;/code>&lt;/pre>&lt;p>Digest = 7908b7585027f7a262d664c7ee07ae5c5733d44e&lt;/p>
+&lt;p>Key Tag = 59581&lt;/p>
+&lt;p>Digest Type = 1&lt;/p>
+&lt;p>Algorithm = 13&lt;/p>
+&lt;h2 id="检验">检验&lt;/h2>
+&lt;ul>
+&lt;li>检查域名是否已在全球生效&lt;/li>
+&lt;/ul>
+&lt;p>打开网站： &lt;a href="https://dnschecker.org/">https://dnschecker.org/&lt;/a>&lt;/p>
+&lt;p>输入域名 some.host , 检查各地的解析情况&lt;/p>
+&lt;ul>
+&lt;li>使用dig在本地服务器检验DNSSEC&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code># dig some.host +dnssec +multi @localhost
+;; AUTHORITY SECTION:
+some.host. 86400 IN SOA ns1.some.host. hostmaster.some.host. (
+2017101100 ; serial
+28800 ; refresh (8 hours)
+7200 ; retry (2 hours)
+604800 ; expire (1 week)
+86400 ; minimum (1 day)
+)
+some.host. 86400 IN RRSIG SOA 13 2 86400 (
+20171019000000 20170928000000 59581 some.host.
+UyrOyITKMWhtf2n8lN3ZhtxaAGSMFQI9Qndd49D2/Pe5
+wWLileK3RVPFRGlXflQfFDfQ6wb7R5+aBCls6qkmIA== )
+some.host. 86400 IN NSEC some.host. SOA RRSIG NSEC DNSKEY
+some.host. 86400 IN RRSIG NSEC 13 2 86400 (
+20171019000000 20170928000000 59581 some.host.
+4fjlTftqvjmoH0OwVf3uuC8OvvuYyyIckn+c5L0J89Np
+kc1+LCZ5DJpQrnbsWypxr5bDXARB86pr046dbrs21A== )
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>使用在线工具检验 DNSSEC&lt;/li>
+&lt;/ul>
+&lt;p>打开网页 &lt;a href="https://dnssec-debugger.verisignlabs.com">https://dnssec-debugger.verisignlabs.com&lt;/a>&lt;/p>
+&lt;p>输入域名 some.host&lt;/p>
+&lt;h2 id="参考资料">参考资料&lt;/h2>
+&lt;ul>
+&lt;li>[How To Install and Configure PowerDNS with a MariaDB Backend on Ubuntu 14.04] (&lt;a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-powerdns-with-a-mariadb-backend-on-ubuntu-14-04">https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-powerdns-with-a-mariadb-backend-on-ubuntu-14-04&lt;/a>)&lt;/li>
+&lt;li>&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin/wiki/Running-PowerDNS-Admin-on-Ubuntu-16.04---Ubuntu-18.04">Running PowerDNS Admin on Ubuntu 16.04 Ubuntu 18.04&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin/wiki/Using-PowerDNS-Admin-with-PostgreSQL">Using PowerDNS Admin with PostgreSQL&lt;/a>&lt;/li>
+&lt;li>官方安装文档 &lt;a href="https://doc.powerdns.com/authoritative/installation.html">https://doc.powerdns.com/authoritative/installation.html&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.claudiokuenzler.com/blog/844/powerdns-master-slave-dns-replication-mysql-backend">PowerDNS Master Slave DNS Replication with MySQL backend&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="vps-推荐">VPS 推荐&lt;/h2>
+&lt;ul>
+&lt;li>[10g.biz] (&lt;a href="https://10g.biz/aff.php?aff=226">https://10g.biz/aff.php?aff=226&lt;/a>)&lt;/li>
+&lt;li>[bandwagonhost 中国优化] (&lt;a href="https://bandwagonhost.com/aff.php?aff=20451">https://bandwagonhost.com/aff.php?aff=20451&lt;/a>)&lt;/li>
+&lt;li>[cubecloud] (&lt;a href="https://www.cubecloud.net/aff.php?aff=963">https://www.cubecloud.net/aff.php?aff=963&lt;/a>)&lt;/li>
+&lt;/ul></description></item><item><title>tomcat 以 keystore 的方式使用 letsencrypt 证书</title><link>https://windyboy.github.io/posts/tech/tomcat-keystore-using-letsencrypt-certs/</link><pubDate>Wed, 28 Sep 2016 16:00:00 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/tomcat-keystore-using-letsencrypt-certs/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://tomcat.apache.org/" title="apache tomcat">apache tomcat&lt;/a> 应用服务器（在不使用apr连接器时）使用SSL证书的时候使用的是java专属的证书管理方式&lt;a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html" title="keystore">keystore&lt;/a>, 并不能直接使用&lt;a href="https://letsencrypt.org/" title="letsencrypt">letsencrypt&lt;/a>的免费证书。&lt;/li>
+&lt;li>要把证书导入&lt;a href="https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html" title="keystore">keystore&lt;/a>, 首先需要使用&lt;a href="https://www.openssl.org/" title="openssl">openssl&lt;/a>把证书导出到.p12文件中，然后使用keytool把ca倒入为root(alias root)， 把服务器的证书导入为tomcat(alias tomcat)。&lt;/li>
+&lt;/ul>
+&lt;h2 id="导入证书">导入证书&lt;/h2>
+&lt;ul>
+&lt;li>前提&lt;/li>
+&lt;/ul>
+&lt;p>已经成功申请到有效的证书(使用&lt;a href="https://letsencrypt.org/" title="letsencrypt">letsencrypt&lt;/a> 申请有效的服务器证书)。&lt;/p>
+&lt;ul>
+&lt;li>使用 openssl 工具，把证书导出到.p12文件中&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code> # openssl pkcs12 -export -in cert.pem -inkey privkey.pem \
+-out cert_and_key.p12 -name tomcat \
+-CAfile chain.pem -caname root
+Enter Export Password:
+Verifying - Enter Export Password:
+&lt;/code>&lt;/pre>&lt;p>提示输入导出密码，这里导出密码，可以直接回车，此时密码为空。 如果输入了密码，则在下面导入的时候需要输入相同的密码&lt;/p>
+&lt;ul>
+&lt;li>使用keytool导入证书和ca&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code> # keytool -importkeystore \
+-deststorepass &amp;lt;changeit&amp;gt; -destkeypass &amp;lt;changeit&amp;gt; \
+-destkeystore MyDSKeyStore.jks -srckeystore cert_and_key.p12 \
+-srcstoretype PKCS12 \
+-srcstorepass &amp;lt;theExportPasswordAbove&amp;gt; -alias tomcat
+&lt;/code>&lt;/pre>&lt;p>注意deststorepass和destkeypass必须相同，否则tomcat无法获取证书&lt;/p>
+&lt;pre tabindex="0">&lt;code> # keytool -import -trustcacerts \
+-srcstorepass &amp;lt;theExportPasswordAbove&amp;gt; \
+-alias root -file chain.pem -keystore MyKeyStore.jks
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>配置&lt;a href="https://tomcat.apache.org/" title="apache tomcat">apache tomcat&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code> # vim conf/server.xml
+&amp;lt;Connector port=&amp;#34;443&amp;#34; protocol=&amp;#34;org.apache.coyote.http11.Http11Protocol&amp;#34;
+maxThreads=&amp;#34;150&amp;#34; SSLEnabled=&amp;#34;true&amp;#34; scheme=&amp;#34;https&amp;#34; secure=&amp;#34;true&amp;#34;
+keystoreFile=&amp;#34;/&amp;lt;path&amp;gt;/MyKeyStore.jks&amp;#34; keystorePass=&amp;#34;&amp;lt;changeit&amp;gt;&amp;#34;
+clientAuth=&amp;#34;false&amp;#34; sslProtocol=&amp;#34;TLS&amp;#34; /&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>keystoreFile 是MyKeyStore.jks文件的绝对路径&lt;/p>
+&lt;p>&lt;em>&lt;strong>keystorePass 是MyKeyStore.jks的storepasss以及keypass, 必须相同&lt;/strong>&lt;/em>&lt;/p>
+&lt;h2 id="参考资料">参考资料&lt;/h2>
+&lt;ul>
+&lt;li>How to use the certificate for Tomcat &lt;a href="https://community.letsencrypt.org/t/how-to-use-the-certificate-for-tomcat/3677">https://community.letsencrypt.org/t/how-to-use-the-certificate-for-tomcat/3677&lt;/a>&lt;/li>
+&lt;li>keytool - Key and Certificate Management Tool &lt;a href="http://docs.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html">http://docs.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html&lt;/a>&lt;/li>
+&lt;li>Tomcat SSL/TLS Configuration HOW-TO &lt;a href="https://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html">https://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html&lt;/a>&lt;/li>
+&lt;li>letsencrypt.sh 证书制作 &lt;a href="https://www.hshh.org/letsencrypt/letsencrypt.sh_http-01">https://www.hshh.org/letsencrypt/letsencrypt.sh_http-01&lt;/a>&lt;/li>
+&lt;li>免费证书提供 &lt;a href="https://letsencrypt.org/">https://letsencrypt.org/&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="vps-推荐">VPS 推荐&lt;/h2>
+&lt;ul>
+&lt;li>[linode 东京] (&lt;a href="https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66">https://www.linode.com/?r=ec0967c3fb5243693ca573d68000d3a63442ac66&lt;/a>)&lt;/li>
+&lt;li>[bandwagonhost 中国优化] (&lt;a href="https://bandwagonhost.com/aff.php?aff=20451">https://bandwagonhost.com/aff.php?aff=20451&lt;/a>)&lt;/li>
+&lt;li>[dgchost 新加波] (&lt;a href="https://www.dgchost.net/client/aff.php?aff=226">https://www.dgchost.net/client/aff.php?aff=226&lt;/a>)&lt;/li>
+&lt;/ul></description></item></channel></rss>
