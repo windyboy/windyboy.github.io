@@ -90,8 +90,8 @@ root
 ├── root-ca-key.pem
 └── root-ca.pem
 &lt;/code>&lt;/pre>&lt;h3 id="2-生成证书签发">2. 生成证书签发&lt;/h3>
-&lt;pre tabindex="0">&lt;code>$ mkdir intermedia
-$ vim intermedia/intermedia-csr.json
+&lt;pre tabindex="0">&lt;code>$ mkdir intermediate
+$ vim intermediate/intermediate-csr.json
 {
 &amp;#34;CN&amp;#34;: &amp;#34;example.net CA&amp;#34;,
 &amp;#34;key&amp;#34;: {
@@ -122,8 +122,8 @@ intermediate
 └── intermediate-csr.json
 &lt;/code>&lt;/pre>&lt;h3 id="3使用签发机构的证书签发服务器证书">3.使用签发机构的证书签发服务器证书&lt;/h3>
 &lt;pre tabindex="0">&lt;code>$ mkdir server
-$ cp ca-csr.json server/server.json
-$ vim server/server.json
+$ cp ca-csr.json server/server-csr.json
+$ vim server/server-csr.json
 {
 &amp;#34;CN&amp;#34;: &amp;#34;example.net&amp;#34;,
 &amp;#34;hosts&amp;#34;: [
@@ -143,7 +143,7 @@ $ vim server/server.json
 }
 ]
 }
-&lt;/code>&lt;/pre>&lt;p>根据实际情况修改server.json, 这个就是服务器证书，对应到需要的域名&lt;/p>
+&lt;/code>&lt;/pre>&lt;p>根据实际情况修改server-csr.json, 这个就是服务器证书，对应到需要的域名&lt;/p>
 &lt;pre tabindex="0">&lt;code>$ cfssl gencert \
 -ca intermediate/intermediate-ca.pem \
 -ca-key intermediate/intermediate-ca-key.pem \
