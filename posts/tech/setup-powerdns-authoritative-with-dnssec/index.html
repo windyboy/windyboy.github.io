@@ -146,11 +146,9 @@ x.x.x.x1   ns1.some.host
 x.x.x.x2   ns2.some.host
 </code></pre><p>两台解析服务器都使用相同配置</p><ul><li>分别在两台主机验证</li></ul><pre tabindex=0><code># ping ns1.some.host
 # ping ns2.some.host
-</code></pre><h3 id=master-ns1somehost>Master ns1.some.host</h3><p>修改master 服务器设置，一个是master=yes,另一个是allow-axfr-ips=<slave ip>
-vim /etc/powerdns/pdns.conf</p><pre tabindex=0><code>master=yes
+</code></pre><h3 id=master-ns1somehost>Master ns1.some.host</h3><p>修改master 服务器设置，一个是master=yes,另一个是allow-axfr-ips=<slave ip></p><p>vim /etc/powerdns/pdns.conf</p><pre tabindex=0><code>master=yes
 allow-axfr-ips=x.x.x.x2
-</code></pre><p>其中x.x.x.x2为从服务器ns2.some.host的ip地址</p><h3 id=slave-ns2somehost>Slave ns2.some.host</h3><p>修改slave的配置，一个是slave=yes, 另一个 allow-axfr-ips=<master ip>
-vim /etc/powerdns/pdns.conf</p><pre tabindex=0><code>slave=yes
+</code></pre><p>其中x.x.x.x2为从服务器ns2.some.host的ip地址</p><h3 id=slave-ns2somehost>Slave ns2.some.host</h3><p>修改slave的配置，一个是slave=yes, 另一个 allow-axfr-ips=<master ip></p><p>vim /etc/powerdns/pdns.conf</p><pre tabindex=0><code>slave=yes
 allow-axfr-ips=x.x.x.x1
 </code></pre><h3 id=使用powerdns-admin界面创建域名>使用<a href=https://github.com/ngoduykhanh/PowerDNS-Admin title=web>powerdns-admin</a>界面创建域名</h3><p>登录到<a href=https://github.com/ngoduykhanh/PowerDNS-Admin title=web>powerdns-admin</a>的网页， 选择New Domain，进入新建向导的网页, 在 name 里输入域名 some.host, type 设置为 master, SOA-EDIT-API 默认 DEFAULT</p><p>点击Dashboard 回到主界面, 从列表中选择刚才创建的域名 some.host</p><pre tabindex=0><code>some.host	SOA	ns1.some.host hostmaster.some.host 2017101100 28800 7200 604800 86400
 </code></pre><p>第一条ns1.some.host为主服务器域名</p><p>第二条hostmaster.some.host实际上是邮件地址，系统替换第一个&rsquo;.&lsquo;为&rsquo;@&rsquo;, 这里代表的地址是hostmaster@some.host，具体可以根据实际情况写自己的邮箱地址</p><p>创建成功以后可以用dig命令核实一下</p><pre tabindex=0><code>dig some.host soa @localhost

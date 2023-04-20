@@ -990,14 +990,14 @@ x.x.x.x2 ns2.some.host
 &lt;pre tabindex="0">&lt;code># ping ns1.some.host
 # ping ns2.some.host
 &lt;/code>&lt;/pre>&lt;h3 id="master-ns1somehost">Master ns1.some.host&lt;/h3>
-&lt;p>修改master 服务器设置，一个是master=yes,另一个是allow-axfr-ips=&lt;slave ip>
-vim /etc/powerdns/pdns.conf&lt;/p>
+&lt;p>修改master 服务器设置，一个是master=yes,另一个是allow-axfr-ips=&lt;slave ip>&lt;/p>
+&lt;p>vim /etc/powerdns/pdns.conf&lt;/p>
 &lt;pre tabindex="0">&lt;code>master=yes
 allow-axfr-ips=x.x.x.x2
 &lt;/code>&lt;/pre>&lt;p>其中x.x.x.x2为从服务器ns2.some.host的ip地址&lt;/p>
 &lt;h3 id="slave-ns2somehost">Slave ns2.some.host&lt;/h3>
-&lt;p>修改slave的配置，一个是slave=yes, 另一个 allow-axfr-ips=&lt;master ip>
-vim /etc/powerdns/pdns.conf&lt;/p>
+&lt;p>修改slave的配置，一个是slave=yes, 另一个 allow-axfr-ips=&lt;master ip>&lt;/p>
+&lt;p>vim /etc/powerdns/pdns.conf&lt;/p>
 &lt;pre tabindex="0">&lt;code>slave=yes
 allow-axfr-ips=x.x.x.x1
 &lt;/code>&lt;/pre>&lt;h3 id="使用powerdns-admin界面创建域名">使用&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a>界面创建域名&lt;/h3>
