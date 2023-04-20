@@ -54,8 +54,8 @@ pdns=&amp;gt; \i /usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql
 &lt;/ul>
 &lt;p>在从(Slave)服务器上执行&lt;/p>
 &lt;pre tabindex="0">&lt;code># psql -U pdns -d pdns -h 127.0.0.1 -p 5432
-pdns=&amp;gt; insert into supermasters (ip, nameserver, account) values (&amp;#39;x.x.x.x1&amp;#39;, &amp;#39;ns2.some.host&amp;#39;,&amp;#39;admin&amp;#39;);
-pdns=&amp;gt; insert into domains (name, master, type) values (&amp;#39;some.host&amp;#39;, &amp;#39;x.x.x.x1&amp;#39;, &amp;#39;SLAVE&amp;#39;);
+pdns=&amp;gt; insert into supermasters (ip, nameserver, account) values (&amp;#39;x.x.x.x1&amp;#39;, &amp;#39;ns1.some.host&amp;#39;,&amp;#39;&amp;#39;);
+pdns=&amp;gt;
 pdns=&amp;gt;\q
 # systemctl restart pdns
 &lt;/code>&lt;/pre>&lt;p>x.x.x.x1 是主服务器的IP地址&lt;/p>
@@ -191,52 +191,16 @@ x.x.x.x2 ns2.some.host
 &lt;pre tabindex="0">&lt;code># ping ns1.some.host
 # ping ns2.some.host
 &lt;/code>&lt;/pre>&lt;h3 id="master-ns1somehost">Master ns1.some.host&lt;/h3>
-&lt;pre tabindex="0">&lt;code># vim /etc/powerdns/pdns.conf
-config-dir=/etc/powerdns
-setuid=pdns
-setgid=pdns
-master=yes
-slave=no
-allow-axfr-ips=x.x.x.x2/32
-default-soa-name=ns1.some.host
-dnsupdate=yes
-daemon=yes
-disable-axfr=no
-guardian=yes
-local-address=0.0.0.0
-local-port=53
-log-dns-details=no
-log-dns-queries=no
-loglevel=9
-socket-dir=/var/run
-version-string=powerdns
-# only 4.0
-webserver=yes
-api=yes
-api-key=somekey
-include-dir=/etc/powerdns/pdns.d
-launch=
+&lt;p>修改master 服务器设置，一个是master=yes,另一个是allow-axfr-ips=&lt;slave ip>
+vim /etc/powerdns/pdns.conf&lt;/p>
+&lt;pre tabindex="0">&lt;code>master=yes
+allow-axfr-ips=x.x.x.x2
 &lt;/code>&lt;/pre>&lt;p>其中x.x.x.x2为从服务器ns2.some.host的ip地址&lt;/p>
 &lt;h3 id="slave-ns2somehost">Slave ns2.some.host&lt;/h3>
-&lt;pre tabindex="0">&lt;code># vim /etc/powerdns/pdns.conf
-config-dir=/etc/powerdns
-setuid=pdns
-setgid=pdns
-master=no
-slave=yes
-daemon=yes
-disable-axfr=yes
-guardian=yes
-local-address=0.0.0.0
-local-port=53
-log-dns-details=no
-log-dns-queries=no
-loglevel=9
-slave-cycle-interval=60
-socket-dir=/var/run
-version-string=powerdns
-include-dir=/etc/powerdns/pdns.d
-launch=
+&lt;p>修改slave的配置，一个是slave=yes, 另一个 allow-axfr-ips=&lt;master ip>
+vim /etc/powerdns/pdns.conf&lt;/p>
+&lt;pre tabindex="0">&lt;code>slave=yes
+allow-axfr-ips=x.x.x.x1
 &lt;/code>&lt;/pre>&lt;h3 id="使用powerdns-admin界面创建域名">使用&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a>界面创建域名&lt;/h3>
 &lt;p>登录到&lt;a href="https://github.com/ngoduykhanh/PowerDNS-Admin" title="web">powerdns-admin&lt;/a>的网页， 选择New Domain，进入新建向导的网页, 在 name 里输入域名 some.host, type 设置为 master, SOA-EDIT-API 默认 DEFAULT&lt;/p>
 &lt;p>点击Dashboard 回到主界面, 从列表中选择刚才创建的域名 some.host&lt;/p>
@@ -276,7 +240,7 @@ DS = some.host. IN DS 59581 13 4 53062fef193fae2564f9f2441cb821ae3b55c92afac5790
 &lt;li>在主服务器创建 TSIG Key&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code># pdnsutil generate-tsig-key mykey hmac-sha512
-# pdnsutil activate-tsig-key some.host mykey
+# pdnsutil activate-tsig-key some.host mykey primary
 &lt;/code>&lt;/pre>&lt;ul>
 &lt;li>把相关信息推送到从服务器&lt;/li>
 &lt;/ul>
