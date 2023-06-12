@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cfssl on 后花园</title><link>https://windyboy.github.io/tags/cfssl/</link><description>Recent content in cfssl on 后花园</description><generator>Hugo -- gohugo.io</generator><language>cn</language><copyright>© 2016-2022 糖醋小排 版权所有.</copyright><lastBuildDate>Wed, 02 Mar 2022 15:40:47 +0800</lastBuildDate><atom:link href="https://windyboy.github.io/tags/cfssl/index.xml" rel="self" type="application/rss+xml"/><item><title>使用CFSSL证书的生成</title><link>https://windyboy.github.io/posts/tech/cfssl-self-signed/</link><pubDate>Wed, 02 Mar 2022 15:40:47 +0800</pubDate><guid>https://windyboy.github.io/posts/tech/cfssl-self-signed/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>在公司内网部署环境的时候总需要SSL的支持，其实最理想的情况是使用&lt;a href="https://letsencrypt.org" title="letsencrypt">letsencrypt&lt;/a>的服务。
+在没有外网条件的时候只能采用自生成的方案。&lt;/p>
+&lt;p>最初的时候使用&lt;a href="https://openssl.org" title="openssl">openssl&lt;/a>的&lt;a href="https://github.com/OpenVPN/easy-rsa" title="easyrsa">easyrsa&lt;/a>生成，后来一直想找一个更好一点的工具，如果直接搜索的话，会查到&lt;a href="https://cert-manager.io" title="cert manager">cert-manager&lt;/a>，感觉又不太合适。&lt;/p>
+&lt;p>直到看到&lt;a href="https://github.com/cloudflare/cfssl" title="CloudFlare's PKI/TLS toolkit">cfssl&lt;/a>，感觉完美契合要求&lt;/p>
+&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="从源码安装">从源码安装&lt;/h3>
+&lt;p>软件使用&lt;a href="https://go.dev" title="go lang">go&lt;/a>语言编写, 需要先安装，此处省略&lt;a href="https://go.dev" title="go lang">go&lt;/a>的安装。&lt;/p>
+&lt;ul>
+&lt;li>编译：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>$ git clone git@github.com:cloudflare/cfssl.git
+$ cd cfssl
+$ make
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>编译后生成可执行文件&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>tree bin
+bin
+├── cfssl
+├── cfssl-bundle
+├── cfssl-certinfo
+├── cfssljson
+├── cfssl-newkey
+├── cfssl-scan
+├── mkbundle
+├── multirootca
+└── rice
+&lt;/code>&lt;/pre>&lt;h2 id="生成">生成&lt;/h2>
+&lt;p>自签名证书一般分为三个部分，首先是根证书CA，然后是根证书签名的中间发证，最后是服务器证书。&lt;/p>
+&lt;h3 id="1-生成根证书-root-ca">1. 生成根证书 root ca&lt;/h3>
+&lt;p>生成默认配置&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ cfssl print-defaults config &amp;gt; ca-config.json
+$ cfssl print-defaults csr &amp;gt; ca-csr.json
+$ vim ca-config.json
+{
+&amp;#34;signing&amp;#34;: {
+&amp;#34;default&amp;#34;: {
+&amp;#34;expiry&amp;#34;: &amp;#34;168h&amp;#34;
+},
+&amp;#34;profiles&amp;#34;: {
+&amp;#34;intermediate&amp;#34;: {
+&amp;#34;usages&amp;#34;: [&amp;#34;cert sign&amp;#34;, &amp;#34;crl sign&amp;#34;],
+&amp;#34;expiry&amp;#34;: &amp;#34;70080h&amp;#34;,
+&amp;#34;ca_constraint&amp;#34;: {
+&amp;#34;is_ca&amp;#34;: true,
+&amp;#34;max_path_len&amp;#34;: 1
+}
+},
+&amp;#34;host&amp;#34;: {
+&amp;#34;usages&amp;#34;: [
+&amp;#34;signing&amp;#34;,
+&amp;#34;digital signing&amp;#34;,
+&amp;#34;key encipherment&amp;#34;,
+&amp;#34;server auth&amp;#34;
+],
+&amp;#34;expiry&amp;#34;: &amp;#34;8760h&amp;#34;
+}
+}
+}
+}
+&lt;/code>&lt;/pre>&lt;p>修改ca-config.json，2个profile，一个是证书签发的itermediate，一个是服务器证书host&lt;/p>
+&lt;p>根证书的配置&lt;/p>
+&lt;pre tabindex="0">&lt;code>cat ca-csr.json
+{
+&amp;#34;CN&amp;#34;: &amp;#34;example.net&amp;#34;,
+&amp;#34;hosts&amp;#34;: [
+&amp;#34;example.net&amp;#34;,
+&amp;#34;www.example.net&amp;#34;
+],
+&amp;#34;key&amp;#34;: {
+&amp;#34;algo&amp;#34;: &amp;#34;ecdsa&amp;#34;,
+&amp;#34;size&amp;#34;: 256
+},
+&amp;#34;names&amp;#34;: [
+{
+&amp;#34;C&amp;#34;: &amp;#34;US&amp;#34;,
+&amp;#34;ST&amp;#34;: &amp;#34;CA&amp;#34;,
+&amp;#34;L&amp;#34;: &amp;#34;San Francisco&amp;#34;
+}
+]
+}
+&lt;/code>&lt;/pre>&lt;p>修改根证书的相关信息&lt;/p>
+&lt;p>生成&lt;/p>
+&lt;pre tabindex="0">&lt;code>mkdir root
+cfssl gencert -initca ca-csr.json \
+| cfssljson -bare root/root-ca
+root
+├── root-ca.csr
+├── root-ca-key.pem
+└── root-ca.pem
+&lt;/code>&lt;/pre>&lt;h3 id="2-生成证书签发">2. 生成证书签发&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ mkdir intermediate
+$ vim intermediate/intermediate-csr.json
+{
+&amp;#34;CN&amp;#34;: &amp;#34;example.net CA&amp;#34;,
+&amp;#34;key&amp;#34;: {
+&amp;#34;algo&amp;#34;: &amp;#34;ecdsa&amp;#34;,
+&amp;#34;size&amp;#34;: 256
+},
+&amp;#34;names&amp;#34;: [
+{
+&amp;#34;C&amp;#34;: &amp;#34;US&amp;#34;,
+&amp;#34;ST&amp;#34;: &amp;#34;CA&amp;#34;,
+&amp;#34;L&amp;#34;: &amp;#34;San Francisco&amp;#34;
+}
+]
+}
+$ cfssl genkey intermediate/intermediate-csr.json \
+| cfssljson -bare intermediate/intermediate-ca
+$ cfssl sign -ca root/root-ca.pem \
+-ca-key root/root-ca-key.pem \
+-config ca-config.json \
+-profile intermediate \
+intermediate/intermediate-ca.csr \
+| cfssljson -bare intermediate/intermediate-ca
+$ tree intermediate
+intermediate
+├── intermediate-ca.csr
+├── intermediate-ca-key.pem
+├── intermediate-ca.pem
+└── intermediate-csr.json
+&lt;/code>&lt;/pre>&lt;h3 id="3使用签发机构的证书签发服务器证书">3.使用签发机构的证书签发服务器证书&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ mkdir server
+$ cp ca-csr.json server/server-csr.json
+$ vim server/server-csr.json
+{
+&amp;#34;CN&amp;#34;: &amp;#34;example.net&amp;#34;,
+&amp;#34;hosts&amp;#34;: [
+&amp;#34;example.net&amp;#34;,
+&amp;#34;*.example.net&amp;#34;,
+&amp;#34;localhost&amp;#34;
+],
+&amp;#34;key&amp;#34;: {
+&amp;#34;algo&amp;#34;: &amp;#34;ecdsa&amp;#34;,
+&amp;#34;size&amp;#34;: 256
+},
+&amp;#34;names&amp;#34;: [
+{
+&amp;#34;C&amp;#34;: &amp;#34;US&amp;#34;,
+&amp;#34;ST&amp;#34;: &amp;#34;CA&amp;#34;,
+&amp;#34;L&amp;#34;: &amp;#34;San Francisco&amp;#34;
+}
+]
+}
+&lt;/code>&lt;/pre>&lt;p>根据实际情况修改server-csr.json, 这个就是服务器证书，对应到需要的域名&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ cfssl gencert \
+-ca intermediate/intermediate-ca.pem \
+-ca-key intermediate/intermediate-ca-key.pem \
+-config ca-config.json \
+-profile host \
+server/server-csr.json \
+| cfssljson -bare server/server
+$ tree server
+server
+├── server.csr
+├── server.json
+├── server-key.pem
+└── server.pem
+&lt;/code>&lt;/pre>&lt;h3 id="4-生成chain包含签发的证书">4. 生成chain，包含签发的证书&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ cat server/server.pem intermediate/intermediate-ca.pem \
+&amp;gt; server/fullchain.pem
+&lt;/code>&lt;/pre>&lt;h3 id="5-测试证书">5. 测试证书&lt;/h3>
+&lt;pre tabindex="0">&lt;code>$ openssl x509 -in server/server.pem -text -noout
+&lt;/code>&lt;/pre>&lt;p>检查证书和key是否匹配&lt;/p>
+&lt;pre tabindex="0">&lt;code>$ openssl x509 -noout -modulus -in server/server.pem | openssl md5
+$ openssl x509 -noout -modulus -in server/fullchain.pem | openssl md5
+$ openssl rsa -noout -modulus -in server/server-key.pem | openssl md5
+&lt;/code>&lt;/pre>&lt;h2 id="安装-1">安装&lt;/h2>
+&lt;h3 id="nginx">nginx&lt;/h3>
+&lt;pre tabindex="0">&lt;code>ssl_certificate fullchain.pem;
+ssl_certificate_key server-key.pem;
+&lt;/code>&lt;/pre>&lt;h3 id="apache">apache&lt;/h3>
+&lt;pre tabindex="0">&lt;code>SSLCertificateFile server.pem
+SSLCertificateKeyFile server-key.pem
+SSLCertificateChainFile fullchain.pem
+&lt;/code>&lt;/pre>&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/cloudflare/cfssl" title="CloudFlare's PKI/TLS toolkit">cfssl&lt;/a>源码 &lt;a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl&lt;/a>&lt;/li>
+&lt;li>private ca with cfssl &lt;a href="https://www.ekervhen.xyz/posts/2021-02/private-ca-with-cfssl/">https://www.ekervhen.xyz/posts/2021-02/private-ca-with-cfssl/&lt;/a>&lt;/li>
+&lt;li>build ca pki with cfssl &lt;a href="https://computingforgeeks.com/build-pki-ca-for-certificates-management-with-cloudflare-cfssl/">https://computingforgeeks.com/build-pki-ca-for-certificates-management-with-cloudflare-cfssl/&lt;/a>&lt;/li>
+&lt;li>verify certificate matches private key &lt;a href="https://www.ssl247.co.uk/kb/ssl-certificates/troubleshooting/certificate-matches-private-key">https://www.ssl247.co.uk/kb/ssl-certificates/troubleshooting/certificate-matches-private-key&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
